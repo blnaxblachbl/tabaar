@@ -1,7 +1,7 @@
 {
   "name": "tabaar-service",
   "version": "1.0.0",
-  "description": "",
+  "description": "High-performance, open-source Product Information and Catalog Management service",
   "license": "MIT",
   "author": "Tito Everstov",
   "type": "commonjs",
