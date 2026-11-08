@@ -1,0 +1,1148 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Tabaar API - Product",
+    "version": "1.0.0",
+    "description": "Product catalog and variant management endpoints"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4000",
+      "description": "Local development server"
+    },
+    {
+      "url": "/",
+      "description": "Current domain"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Product",
+      "description": "Product catalog and variant management"
+    }
+  ],
+  "paths": {
+    "/api/product": {
+      "get": {
+        "tags": ["Product"],
+        "summary": "Search and filter products",
+        "description": "Searches products in Elasticsearch with text query, pagination, and flexible filtering criteria.",
+        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Elasticsearch text search query string",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Number of products to return (1 - 10,000, default 50)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10000,
+              "default": 50
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "description": "Optional product search filters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductFilters"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Products retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductsListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters or filters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Product"],
+        "summary": "Create a product",
+        "description": "Creates a new product document in Elasticsearch with a unique CUID.",
+        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Product created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductFull"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/product/scroll": {
+      "get": {
+        "tags": ["Product"],
+        "summary": "Scroll through product search results",
+        "description": "Retrieves the next page of products using Elasticsearch scroll API.",
+        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "parameters": [
+          {
+            "name": "scrollId",
+            "in": "query",
+            "required": true,
+            "description": "Scroll ID returned from previous product search or scroll request",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Scrolled products retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductsListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/product/bulk": {
+      "post": {
+        "tags": ["Product"],
+        "summary": "Bulk create products from JSON file",
+        "description": "Uploads a single JSON file (max 5MB) containing an array of products with their variants to be indexed in Elasticsearch.",
+        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["file"],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "JSON file containing an array of products with variants (application/json, max 5MB)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "All products in bulk file created successfully"
+          },
+          "400": {
+            "description": "Invalid file, schema validation error, or list of errored documents",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ErrorMessage"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/product/{id}": {
+      "get": {
+        "tags": ["Product"],
+        "summary": "Get product by ID",
+        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Product CUID identifier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductFull"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid product ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Product"],
+        "summary": "Update product by ID",
+        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Product CUID identifier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProductInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Product updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductFull"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters or request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to update product / internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Product"],
+        "summary": "Delete product by ID (soft delete)",
+        "description": "Marks product document as deleted (`deleted: true`) in Elasticsearch.",
+        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Product CUID identifier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product marked as deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductFull"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid product ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to delete product / internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/product/{id}/variant": {
+      "post": {
+        "tags": ["Product"],
+        "summary": "Append variant to product",
+        "description": "Appends a new variant to the product's variants array in Elasticsearch.",
+        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Product CUID identifier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppendVariantInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Variant appended successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductFull"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid product ID or variant data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to create variant / internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/product/{id}/variant/{variantId}": {
+      "put": {
+        "tags": ["Product"],
+        "summary": "Update product variant",
+        "description": "Updates fields of an existing variant within a product.",
+        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Product CUID identifier",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "variantId",
+            "in": "path",
+            "required": true,
+            "description": "Variant CUID identifier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVariantInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Variant updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductFull"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters or variant body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to update variant / internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Product"],
+        "summary": "Delete product variant",
+        "description": "Removes the specified variant from product's variants array in Elasticsearch.",
+        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Product CUID identifier",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "variantId",
+            "in": "path",
+            "required": true,
+            "description": "Variant CUID identifier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Variant deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductFull"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid product ID or variant ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to delete variant / internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Standard JWT Bearer token authentication header: `Authorization: Bearer <token>`"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "API Key authentication header: `x-api-key: <uuid>`"
+      }
+    },
+    "schemas": {
+      "Variant": {
+        "type": "object",
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "deleted",
+          "price",
+          "count",
+          "currency",
+          "images"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "cm35n30w0000008jp8p842zra"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-11-06T12:00:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-11-06T12:00:00.000Z"
+          },
+          "deleted": {
+            "type": "boolean",
+            "example": false
+          },
+          "price": {
+            "type": "number",
+            "example": 99.99
+          },
+          "count": {
+            "type": "number",
+            "example": 25
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["cl7y9a1bc000101q0..."]
+          },
+          "characterstics": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                { "type": "string" },
+                { "type": "number" },
+                { "type": "boolean" }
+              ]
+            },
+            "example": {
+              "color": "black",
+              "size": 42
+            }
+          }
+        }
+      },
+      "AppendVariantInput": {
+        "type": "object",
+        "required": ["price", "count", "currency"],
+        "properties": {
+          "price": {
+            "type": "number",
+            "example": 99.99
+          },
+          "count": {
+            "type": "number",
+            "example": 10
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "characterstics": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                { "type": "string" },
+                { "type": "number" },
+                { "type": "boolean" }
+              ]
+            },
+            "example": {
+              "color": "blue",
+              "storage": "128GB"
+            }
+          }
+        }
+      },
+      "UpdateVariantInput": {
+        "type": "object",
+        "properties": {
+          "price": {
+            "type": "number",
+            "example": 89.99
+          },
+          "count": {
+            "type": "number",
+            "example": 15
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "characterstics": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                { "type": "string" },
+                { "type": "number" },
+                { "type": "boolean" }
+              ]
+            }
+          }
+        }
+      },
+      "ProductFull": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "description",
+          "deleted",
+          "createdAt",
+          "updatedAt",
+          "variants",
+          "minPrice",
+          "maxPrice",
+          "available"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "cm35n1234000008jp8p842abc"
+          },
+          "name": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LocaleContent"
+            }
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LocaleContent"
+            }
+          },
+          "characterstics": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                { "type": "string" },
+                { "type": "number" },
+                { "type": "boolean" }
+              ]
+            },
+            "example": {
+              "brand": "Sony",
+              "bluetooth": true
+            }
+          },
+          "deleted": {
+            "type": "boolean",
+            "example": false
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-11-06T12:00:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-11-06T12:00:00.000Z"
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Variant"
+            }
+          },
+          "minPrice": {
+            "type": "number",
+            "example": 99.99
+          },
+          "maxPrice": {
+            "type": "number",
+            "example": 149.99
+          },
+          "available": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "LocaleContent": {
+        "type": "object",
+        "required": ["locale", "content"],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "example": "ru"
+          },
+          "content": {
+            "type": "string",
+            "example": "Wireless Noise-Canceling Headphones"
+          }
+        }
+      },
+      "CreateProductInput": {
+        "type": "object",
+        "required": ["name", "description"],
+        "properties": {
+          "name": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LocaleContent"
+            }
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LocaleContent"
+            }
+          },
+          "characterstics": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                { "type": "string" },
+                { "type": "number" },
+                { "type": "boolean" }
+              ]
+            },
+            "example": {
+              "layout": "ANSI",
+              "wireless": false
+            }
+          }
+        }
+      },
+      "UpdateProductInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LocaleContent"
+            }
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LocaleContent"
+            }
+          },
+          "characterstics": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                { "type": "string" },
+                { "type": "number" },
+                { "type": "boolean" }
+              ]
+            }
+          }
+        }
+      },
+      "ProductFilters": {
+        "type": "object",
+        "properties": {
+          "available": {
+            "type": "boolean",
+            "example": true
+          },
+          "deleted": {
+            "type": "boolean",
+            "example": false
+          },
+          "minPrice": {
+            "type": "object",
+            "properties": {
+              "lte": { "type": "number" },
+              "gte": { "type": "number" }
+            }
+          },
+          "maxPrice": {
+            "type": "object",
+            "properties": {
+              "lte": { "type": "number" },
+              "gte": { "type": "number" }
+            }
+          },
+          "characterstics": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                { "type": "string" },
+                { "type": "number" },
+                { "type": "boolean" }
+              ]
+            }
+          },
+          "variants": {
+            "type": "object",
+            "properties": {
+              "currency": { "type": "string" },
+              "characterstics": {
+                "type": "object",
+                "additionalProperties": {
+                  "oneOf": [
+                    { "type": "string" },
+                    { "type": "number" },
+                    { "type": "boolean" }
+                  ]
+                }
+              },
+              "count": {
+                "type": "object",
+                "properties": {
+                  "lte": { "type": "number" },
+                  "gte": { "type": "number" }
+                }
+              },
+              "price": {
+                "type": "object",
+                "properties": {
+                  "lte": { "type": "number" },
+                  "gte": { "type": "number" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ProductsListResponse": {
+        "type": "object",
+        "required": ["products", "productsCount"],
+        "properties": {
+          "products": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductFull"
+            }
+          },
+          "productsCount": {
+            "type": "integer",
+            "example": 42
+          },
+          "scrollId": {
+            "type": "string",
+            "description": "Elasticsearch scroll ID for pagination"
+          }
+        }
+      },
+      "BulkCreateProductItem": {
+        "type": "object",
+        "required": ["name", "description", "variants"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Product Name"
+          },
+          "description": {
+            "type": "string",
+            "example": "Product description"
+          },
+          "characterstics": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                { "type": "string" },
+                { "type": "number" },
+                { "type": "boolean" }
+              ]
+            }
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AppendVariantInput"
+            }
+          }
+        }
+      },
+      "ErrorMessage": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Error message description"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": ["error"],
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Error message description"
+          }
+        }
+      }
+    }
+  }
+}

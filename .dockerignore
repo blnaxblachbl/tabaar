@@ -1,0 +1,9 @@
+node_modules
+scripts
+dist
+.git
+*.md
+.env.*
+.env
+docker-compose.yml
+images

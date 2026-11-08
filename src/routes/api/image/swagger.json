@@ -1,0 +1,115 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Tabaar API - Image",
+    "version": "1.0.0",
+    "description": "Public image retrieval endpoints"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4000",
+      "description": "Local development server"
+    },
+    {
+      "url": "/",
+      "description": "Current domain"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Image",
+      "description": "Public image retrieval"
+    }
+  ],
+  "paths": {
+    "/api/image/{id}/{variantId}/{name}": {
+      "get": {
+        "tags": ["Image"],
+        "summary": "Get product variant image",
+        "description": "Generates a presigned MinIO S3 URL (valid for 24 hours) and redirects the client to it via 302 Found.",
+        "security": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Product CUID identifier",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "variantId",
+            "in": "path",
+            "required": true,
+            "description": "Variant CUID identifier",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "Image file name",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirects to the presigned MinIO URL",
+            "headers": {
+              "Location": {
+                "description": "Presigned MinIO URL",
+                "schema": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid search parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Standard JWT Bearer token authentication header: `Authorization: Bearer <token>`"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "API Key authentication header: `x-api-key: <uuid>`"
+      }
+    },
+    "schemas": {
+      "ErrorMessage": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Error message description"
+          }
+        }
+      }
+    }
+  }
+}

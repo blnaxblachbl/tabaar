@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "lib": ["ES6"],
+    "target": "ES6",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "types": ["node"],
+    "paths": {
+      "#*": ["./src/*"],
+    },
+    "rootDir": "./src",
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "resolveJsonModule": true,
+  },
+  "include": ["src", "/src/utils/prisma/generated"],
+  "exclude": ["node_modules", "dist", "scripts"],
+}

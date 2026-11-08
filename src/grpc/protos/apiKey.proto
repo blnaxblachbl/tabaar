@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+service ApiKeyService {
+  rpc GetApiKeys(GetApiKeysRequest) returns (GetApiKeysResponse);
+  rpc GetOneApiKey(GetOneApiKeyRequest) returns (GetOneApiKeyResponse);
+  rpc CreateApiKey(CreateApiKeyRequest) returns (CreateApiKeyResponse);
+  rpc UpdateApiKey(UpdateApiKeyRequest) returns (UpdateApiKeyResponse);
+  rpc DeleteApiKey(DeleteApiKeyRequest) returns (DeleteApiKeyResponse);
+}
+message DeleteApiKeyResponse {
+  ApiKey api_key = 1;
+}
+message GetOneApiKeyResponse {
+  ApiKey api_key = 1;
+}
+message DeleteApiKeyRequest {
+  int32 id = 1;
+}
+message UpdateApiKeyRequest {
+  message UpdateApiKeyRequestData {
+    optional string name = 1;
+    optional string expired_at = 2;
+  }
+  int32 id = 1;
+  UpdateApiKeyRequestData data = 2;
+}
+message UpdateApiKeyResponse {
+  ApiKey api_key = 1;
+}
+message CreateApiKeyRequest {
+  string name = 1;
+  string expired_at = 2;
+}
+message CreateApiKeyResponse {
+  ApiKey api_key = 1;
+}
+message GetOneApiKeyRequest {
+  int32 id = 1;
+}
+message GetApiKeysRequest {
+  optional int32 skip = 1;
+  optional int32 take = 2;
+}
+message GetApiKeysResponse {
+  repeated ApiKey api_keys = 1;
+  int32 api_keys_count = 2;
+}
+message ApiKey {
+  int32 id = 1;
+  string created_at = 2;
+  string updated_at = 3;
+  string key = 4;
+  string name = 5;
+  string expired_at = 6;
+}

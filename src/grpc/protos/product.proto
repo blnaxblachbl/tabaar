@@ -1,0 +1,148 @@
+syntax = "proto3";
+
+import "google/protobuf/struct.proto";
+
+service ProductService {
+  rpc GetProducts(GetProductsRequest) returns (GetProductsResponse);
+  rpc ScrollProducts(ScrollProductsRequest) returns (ScrollProductsResponse);
+  rpc GetOneProduct(GetOneProductRequest) returns (GetOneProductResponse);
+  rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
+  rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse);
+  rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse);
+  rpc AppendVariant(AppendVariantRequest) returns (AppendVariantResponse);
+  rpc UpdateVariant(UpdateVariantRequest) returns (UpdateVariantResponse);
+  rpc DeleteVariant(DeleteVariantRequest) returns (DeleteVariantResponse);
+}
+
+message DeleteVariantResponse {
+  Product product = 1;
+}
+message DeleteVariantRequest {
+  string id = 1;
+  string variant_id = 2;
+}
+message UpdateVariantRequest {
+  message UpdateVariantData {
+    string id = 1;
+    optional google.protobuf.Struct characterstics = 2;
+    optional double price = 3;
+    optional int32 count = 4;
+    optional string currency = 5;
+  }
+  string id = 1;
+  UpdateVariantData data = 2;
+}
+message UpdateVariantResponse {
+  Product product = 1;
+}
+message AppendVariantRequest {
+  message AppendVariantData {
+    google.protobuf.Struct characterstics = 1;
+    double price = 2;
+    int32 count = 3;
+    string currency = 4;
+  }
+  string id = 1;
+  AppendVariantData data = 2;
+}
+message AppendVariantResponse {
+  Product product = 1;
+}
+message DeleteProductRequest {
+  string id = 1;
+}
+message DeleteProductResponse {
+  Product product = 1;
+}
+message CreateProductRequest {
+  repeated LocaleContent name = 1;
+  repeated LocaleContent description = 2;
+  google.protobuf.Struct characterstics = 3;
+}
+message CreateProductResponse {
+  Product product = 1;
+}
+message UpdateProductRequest {
+  message UpdateProductRequestData {
+    repeated LocaleContent name = 1;
+    repeated LocaleContent description = 2;
+    optional google.protobuf.Struct characterstics = 3;
+  }
+  string id = 1;
+  UpdateProductRequestData data = 2;
+}
+message UpdateProductResponse {
+  Product product = 1;
+}
+message GetOneProductRequest {
+  string id = 1;
+}
+message GetOneProductResponse {
+  Product product = 1;
+}
+message ScrollProductsRequest {
+  string scroll_id = 1;
+}
+message Variant {
+  string id = 1;
+  string created_at = 2;
+  string updated_at = 3;
+  google.protobuf.Struct characterstics = 6;
+  double price = 7;
+  int32 count = 8;
+  string currency = 9;
+  repeated string images = 10;
+}
+message LocaleContent {
+    string locale = 1;
+    string content = 2;
+}
+message Product {
+  string id = 1;
+  string created_at = 2;
+  string updated_at = 3;
+  repeated LocaleContent name = 4;
+  repeated LocaleContent description = 5;
+  google.protobuf.Struct characterstics = 6;
+  double max_price = 7;
+  double min_price = 8;
+  bool available = 9;
+  repeated Variant variants = 10;
+}
+message GetProductsRequest {
+  optional string query = 1;
+  optional int32 take = 2;
+  optional ProductsFilter filters = 3;
+}
+message ProductsFilter {
+  optional bool deleted = 1;
+  optional bool available = 2;
+  optional FloatRangeInput min_price = 3;
+  optional FloatRangeInput max_price = 4;
+  optional google.protobuf.Struct characterstics = 5;
+  optional VariantFilterInput variants = 6;
+}
+message FloatRangeInput {
+  optional double gte = 1;
+  optional double lte = 2;
+}
+message IntRangeInput {
+  optional int32 gte = 1;
+  optional int32 lte = 2;
+}
+message VariantFilterInput {
+  optional google.protobuf.Struct characterstics = 1;
+  optional string currency = 2;
+  optional FloatRangeInput price = 3;
+  optional IntRangeInput count = 4;
+}
+message GetProductsResponse {
+  repeated Product products = 1;
+  int32 products_count = 2;
+  string scroll_id = 3;
+}
+message ScrollProductsResponse {
+  repeated Product products = 1;
+  int32 products_count = 2;
+  string scroll_id = 3;
+}

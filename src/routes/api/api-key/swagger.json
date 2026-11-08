@@ -1,0 +1,526 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Tabaar API - API Key",
+    "version": "1.0.0",
+    "description": "API key management endpoints"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4000",
+      "description": "Local development server"
+    },
+    {
+      "url": "/",
+      "description": "Current domain"
+    }
+  ],
+  "tags": [
+    {
+      "name": "API Key",
+      "description": "API key management"
+    }
+  ],
+  "paths": {
+    "/api/api-key": {
+      "get": {
+        "tags": ["API Key"],
+        "summary": "Get list of API keys",
+        "description": "Retrieves paginated non-deleted API keys.",
+        "security": [
+          { "BearerAuth": [] },
+          { "ApiKeyAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Number of records to skip (0 - 10,000)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10000,
+              "default": 0
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Number of records to take (1 - 10,000)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10000,
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of API keys retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiKeysListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["API Key"],
+        "summary": "Create an API key",
+        "description": "Generates a new UUIDv7 API key with name and expiration date.",
+        "security": [
+          { "BearerAuth": [] },
+          { "ApiKeyAuth": [] }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateApiKeyInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "API key created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiKeyWithDeleted"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/api-key/{id}": {
+      "get": {
+        "tags": ["API Key"],
+        "summary": "Get API key by ID",
+        "security": [
+          { "BearerAuth": [] },
+          { "ApiKeyAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "API key numeric ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "API key details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiKey"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "API key not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["API Key"],
+        "summary": "Update API key by ID",
+        "security": [
+          { "BearerAuth": [] },
+          { "ApiKeyAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "API key numeric ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateApiKeyInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "API key updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiKey"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "API key not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["API Key"],
+        "summary": "Delete API key by ID (soft delete)",
+        "security": [
+          { "BearerAuth": [] },
+          { "ApiKeyAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "API key numeric ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "API key marked as deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiKey"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Standard JWT Bearer token authentication header: `Authorization: Bearer <token>`"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "API Key authentication header: `x-api-key: <uuid>`"
+      }
+    },
+    "schemas": {
+      "ApiKey": {
+        "type": "object",
+        "required": ["id", "createdAt", "updatedAt", "key", "name", "expiredAt"],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-11-06T12:00:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-11-06T12:00:00.000Z"
+          },
+          "key": {
+            "type": "string",
+            "format": "uuid",
+            "example": "0192f155-27a3-7bf1-a472-f288d66df21a"
+          },
+          "name": {
+            "type": "string",
+            "example": "Production Service"
+          },
+          "expiredAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2027-01-01T00:00:00.000Z"
+          }
+        }
+      },
+      "ApiKeyWithDeleted": {
+        "type": "object",
+        "required": ["id", "createdAt", "updatedAt", "deleted", "key", "name", "expiredAt"],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-11-06T12:00:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-11-06T12:00:00.000Z"
+          },
+          "deleted": {
+            "type": "boolean",
+            "example": false
+          },
+          "key": {
+            "type": "string",
+            "format": "uuid",
+            "example": "0192f155-27a3-7bf1-a472-f288d66df21a"
+          },
+          "name": {
+            "type": "string",
+            "example": "Production Service"
+          },
+          "expiredAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2027-01-01T00:00:00.000Z"
+          }
+        }
+      },
+      "CreateApiKeyInput": {
+        "type": "object",
+        "required": ["name", "expiredAt"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Mobile Client"
+          },
+          "expiredAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2027-12-31T23:59:59.000Z"
+          }
+        }
+      },
+      "UpdateApiKeyInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Updated Mobile Client"
+          },
+          "expiredAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2028-12-31T23:59:59.000Z"
+          }
+        }
+      },
+      "ApiKeysListResponse": {
+        "type": "object",
+        "required": ["apiKeys", "apiKeysCount"],
+        "properties": {
+          "apiKeys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiKey"
+            }
+          },
+          "apiKeysCount": {
+            "type": "integer",
+            "example": 5
+          }
+        }
+      },
+      "ErrorMessage": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Error message description"
+          }
+        }
+      }
+    }
+  }
+}

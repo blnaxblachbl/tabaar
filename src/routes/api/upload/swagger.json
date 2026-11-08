@@ -1,0 +1,256 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Tabaar API - Upload",
+    "version": "1.0.0",
+    "description": "Media uploads for product variants"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4000",
+      "description": "Local development server"
+    },
+    {
+      "url": "/",
+      "description": "Current domain"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Upload",
+      "description": "Media uploads for product variants"
+    }
+  ],
+  "paths": {
+    "/api/upload": {
+      "post": {
+        "tags": ["Upload"],
+        "summary": "Upload images for product variant",
+        "description": "Uploads up to 5 image files (max 20MB per file) to MinIO and appends their generated identifiers to the product variant.",
+        "security": [
+          { "BearerAuth": [] },
+          { "ApiKeyAuth": [] }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["productId", "variantId", "images"],
+                "properties": {
+                  "productId": {
+                    "type": "string",
+                    "description": "Target product ID"
+                  },
+                  "variantId": {
+                    "type": "string",
+                    "description": "Target variant ID within product"
+                  },
+                  "images": {
+                    "type": "array",
+                    "description": "Image files to upload (max 5 files, image/* only, max 20MB each)",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Images uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadImagesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or file upload error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product or variant not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Upload"],
+        "summary": "Delete images from product variant",
+        "description": "Removes specified image identifiers from the product variant in Elasticsearch and deletes the corresponding files from MinIO.",
+        "security": [
+          { "BearerAuth": [] },
+          { "ApiKeyAuth": [] }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteImagesInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Images deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadImagesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product or variant not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Standard JWT Bearer token authentication header: `Authorization: Bearer <token>`"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "API Key authentication header: `x-api-key: <uuid>`"
+      }
+    },
+    "schemas": {
+      "UploadImagesResponse": {
+        "type": "object",
+        "required": ["images"],
+        "properties": {
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "cm35n9876000008jp8p842xyz",
+              "cm35n9877000008jp8p842uvw"
+            ]
+          }
+        }
+      },
+      "DeleteImagesInput": {
+        "type": "object",
+        "required": ["productId", "variantId", "images"],
+        "properties": {
+          "productId": {
+            "type": "string",
+            "example": "cm35n1234000008jp8p842abc"
+          },
+          "variantId": {
+            "type": "string",
+            "example": "cm35n30w0000008jp8p842zra"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "cm35n9876000008jp8p842xyz"
+            ]
+          }
+        }
+      },
+      "ErrorMessage": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Error message description"
+          }
+        }
+      }
+    }
+  }
+}

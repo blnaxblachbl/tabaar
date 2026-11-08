@@ -1,0 +1,35 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["typedSql"]
+  output          = "../src/utils/prisma/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  // default
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  deleted   Boolean  @default(false)
+  // fields
+  email     String   @unique
+  name      String
+  password  String
+}
+
+model ApiKey {
+  // default
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  deleted   Boolean  @default(false)
+  // fields
+  key       String   @unique @default(dbgenerated("uuidv7()")) @db.Uuid
+  name      String
+  expiredAt DateTime
+
+  @@index([key])
+}
