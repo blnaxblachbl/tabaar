@@ -8,6 +8,7 @@ import { INDEXES, ProductIndex } from "#utils/elastic/types";
 import { elasticSearch } from "#utils/elastic";
 import { parseSource } from "#utils/elastic/functions";
 import { createGrpcProduct } from "#utils/grpc/product";
+import { deleteFolder } from "#utils/minio/deleteFolder";
 
 const schema = z.object({
   id: z.string("Product Id is required"),
@@ -69,6 +70,7 @@ export const deleteVariant: handleUnaryCall<
       });
       return;
     }
+    deleteFolder(`${id}/${variantId}`);
     callback(null, {
       product: createGrpcProduct(parseSource(result.get._source)),
     });

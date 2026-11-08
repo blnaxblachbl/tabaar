@@ -41,4 +41,5 @@ export const ENV = {
     !!process.env.SMPT_USER &&
     !!process.env.SMPT_SENDER &&
     !!process.env.SMPT_SENDER,
+  DEMO_MODE: process.env.DEMO_MODE === "true",
 };

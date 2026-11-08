@@ -3,9 +3,10 @@ import { GraphQLError } from "graphql";
 import { INDEXES, ProductIndex } from "#utils/elastic/types";
 import { parseSource } from "#utils/elastic/functions";
 import { ProductResolvers } from "#graphql/Product/types";
+import { deleteFolder } from "#utils/minio/deleteFolder";
 
 export const deleteVariant: ProductResolvers["Mutation"]["deleteVariant"] =
-  async (_, { id, variantId, select }, { elasticSearch }) => {
+  async (_, { id, variantId }, { elasticSearch }) => {
     try {
       const result = await elasticSearch.update<
         ProductIndex,
@@ -31,6 +32,7 @@ export const deleteVariant: ProductResolvers["Mutation"]["deleteVariant"] =
         console.error(result.result);
         throw new GraphQLError("Failed to delete variant");
       }
+      deleteFolder(`${id}/${variantId}`);
       return parseSource(result.get._source);
     } catch (e) {
       console.error(e);

@@ -21,7 +21,7 @@ function checkToken(verify: Verify | null, checkExpired: boolean = true) {
 export const rules = {
   isAuthorized: rule({ cache: "contextual" })(
     (_parent, _args, { verify }: Context, info: GraphQLResolveInfo) => {
-      return checkToken(verify, info.fieldName !== 'refreshToken');
+      return checkToken(verify, info.fieldName !== "refreshToken");
     },
   ),
 };

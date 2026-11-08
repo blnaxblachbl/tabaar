@@ -48,8 +48,6 @@ export async function deleteImages(req: Request, res: Response) {
     console.error(esUploadResult.result);
     return res.status(404).json({ message: "Product update error" });
   }
-  await deleteFiles(
-    images.map((item) => `${productId}/${variantId}/${item}`),
-  );
+  await deleteFiles(images.map((item) => `${productId}/${variantId}/${item}`));
   return res.status(200).json({ images: newImages });
 }

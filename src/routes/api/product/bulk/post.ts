@@ -4,6 +4,7 @@ import { createId } from "@paralleldrive/cuid2";
 import { elasticSearch } from "#utils/elastic";
 import { INDEXES, ProductIndex } from "#utils/elastic/types";
 import { bulkCreateSchema } from "#utils/zod-schemas/products";
+import { ENV } from "#utils/config";
 
 export async function bulkCreate(req: Request, res: Response) {
   const file = req.file as Express.Multer.File | undefined;
@@ -16,6 +17,9 @@ export async function bulkCreate(req: Request, res: Response) {
     return res.status(400).json({
       message: error.issues[0]?.message ?? "Unacceptable JSON",
     });
+  }
+  if (ENV.DEMO_MODE) {
+    return res.sendStatus(200);
   }
   const operations = data.flatMap((doc) => {
     const _id = createId();

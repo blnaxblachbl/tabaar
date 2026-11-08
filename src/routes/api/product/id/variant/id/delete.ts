@@ -5,9 +5,14 @@ import { elasticSearch } from "#utils/elastic";
 import { INDEXES } from "#utils/elastic/types";
 import { parseSource } from "#utils/elastic/functions";
 import { ProductIndex } from "#utils/elastic/types";
+import { deleteFolder } from "#utils/minio/deleteFolder";
 
 export async function deleteVariant(req: Request, res: Response) {
-  const { success, data: params, error } = variantIdInParams.safeParse(req.params);
+  const {
+    success,
+    data: params,
+    error,
+  } = variantIdInParams.safeParse(req.params);
   if (!success) {
     return res
       .status(400)
@@ -36,6 +41,7 @@ export async function deleteVariant(req: Request, res: Response) {
       console.error(result.result);
       return res.status(500).json({ message: "Failed to delete variant" });
     }
+    deleteFolder(`${id}/${variantId}`);
     return res.status(200).json(parseSource(result.get._source));
   } catch (e) {
     console.error(e);
