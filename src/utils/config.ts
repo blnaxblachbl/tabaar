@@ -31,4 +31,14 @@ export const ENV = {
   GRPC_PORT: Number(process.env.GRPC_PORT ?? "4051"),
   GRPC_API_ENABLED: process.env.GRPC_API_ENABLED !== "false",
   GRPC_API_REFLECTION: process.env.GRPC_API_REFLECTION !== "false",
+  SMPT_HOST: process.env.SMPT_HOST,
+  SMPT_USER: process.env.SMPT_USER,
+  SMPT_PASS: process.env.SMPT_PASS,
+  SMPT_PORT: Number(process.env.SMPT_PORT ?? "465"),
+  SMPT_SENDER: process.env.SMPT_SENDER,
+  SMPT_AVAILABLE:
+    !!process.env.SMPT_HOST &&
+    !!process.env.SMPT_USER &&
+    !!process.env.SMPT_SENDER &&
+    !!process.env.SMPT_SENDER,
 };

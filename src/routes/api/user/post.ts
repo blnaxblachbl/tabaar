@@ -7,6 +7,7 @@ import { PrismaClientKnownRequestError } from "#utils/prisma/generated/runtime/c
 import { USER_FIELDS } from "#routes/api/user/constants";
 import { generateRandomString } from "#utils/randomString";
 import { ENV } from "#utils/config";
+import { sendEmail } from "#utils/mailer";
 
 const bodySchema = z.object({
   name: z.string("Name is required"),
@@ -21,9 +22,7 @@ export async function createUser(req: Request, res: Response) {
     error: bodyError,
   } = bodySchema.safeParse(req.body);
   if (!success) {
-    return res
-      .status(400)
-      .json({ message: bodyError.issues[0].message });
+    return res.status(400).json({ message: bodyError.issues[0].message });
   }
   const generatedPassword = generateRandomString(16);
   const hashedPassword = await bcrypt.hash(generatedPassword, 10);
@@ -43,6 +42,7 @@ export async function createUser(req: Request, res: Response) {
     if (!user) {
       return new Error("Something went wrong");
     }
+    sendEmail(user.email, "Tabaar Account Details", generatedPassword);
     res.json(user);
   } catch (e: unknown) {
     if (e instanceof PrismaClientKnownRequestError) {

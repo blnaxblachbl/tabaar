@@ -9,6 +9,7 @@ import { prisma } from "#utils/prisma";
 import { Prisma } from "#utils/prisma/generated";
 import { generateRandomString } from "#utils/randomString";
 import { ENV } from "#utils/config";
+import { sendEmail } from "#utils/mailer";
 import { USER_FIELDS } from "./constants";
 
 const bodySchema = z.object({
@@ -60,6 +61,7 @@ export const createUser: handleUnaryCall<
       });
       return;
     }
+    sendEmail(user.email, "Tabaar Account Details", generatedPassword);
     callback(null, {
       user: {
         ...user,

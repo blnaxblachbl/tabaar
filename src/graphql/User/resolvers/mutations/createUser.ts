@@ -5,6 +5,7 @@ import { generateRandomString } from "#utils/randomString";
 import { UserResolvers } from "#graphql/User/types";
 import { ENV } from "#utils/config";
 import { PrismaClientKnownRequestError } from "#utils/prisma/generated/runtime/client";
+import { sendEmail } from "#utils/mailer";
 
 export const createUser: UserResolvers["Mutation"]["createUser"] = async (
   _,
@@ -24,6 +25,10 @@ export const createUser: UserResolvers["Mutation"]["createUser"] = async (
         password: hashedPassword,
       },
       select,
+    })
+    .then((data) => {
+      sendEmail(data.email, "Tabaar Account Details", generatedPassword);
+      return data;
     })
     .catch((e: unknown) => {
       if (e instanceof PrismaClientKnownRequestError) {

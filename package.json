@@ -18,6 +18,7 @@
     "prisma:studio": "prisma studio",
     "prisma:reset": "prisma migrate reset",
     "seed": "node seed.js",
+    "studio": "prisma studio",
     "deploy": "prisma migrate deploy && node seed.js && npm start",
     "proto:generate": "rm -rf ./src/grpc/generated && proto-loader-gen-types --outDir=./src/grpc/generated ./src/grpc/protos/*.proto"
   },
@@ -35,7 +36,6 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "prisma": "^7.10.0",
     "@apollo/server": "^5.5.1",
     "@as-integrations/express5": "^1.1.2",
     "@elastic/elasticsearch": "^9.5.1",
@@ -63,6 +63,8 @@
     "minio": "^8.0.5",
     "multer": "^2.5.0",
     "node-cache": "^5.1.2",
+    "nodemailer": "^10.4.0",
+    "prisma": "^7.10.0",
     "sharp": "^0.35.5",
     "zod": "^4.6.5"
   }
