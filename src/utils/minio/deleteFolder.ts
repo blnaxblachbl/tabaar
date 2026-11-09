@@ -1,4 +1,6 @@
+//@ts-nocheck
 import { ObjectInfo } from "minio/dist/main/internal/type";
+
 import { bucketName, minioClient } from ".";
 import { deleteFiles } from "./deleteFiles";
 

@@ -18,9 +18,6 @@ export async function bulkCreate(req: Request, res: Response) {
       message: error.issues[0]?.message ?? "Unacceptable JSON",
     });
   }
-  if (ENV.DEMO_MODE) {
-    return res.sendStatus(200);
-  }
   const operations = data.flatMap((doc) => {
     const _id = createId();
     const now = new Date().toISOString();
