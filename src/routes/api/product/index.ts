@@ -11,11 +11,12 @@ import { appendVariant } from "./id/variant/post";
 import { updateVariant } from "./id/variant/id/put";
 import { deleteVariant } from "./id/variant/id/delete";
 import { bulkCreate } from "./bulk/post";
+import { ENV } from "#utils/config";
 
 const productRouter = express.Router();
 const upload = multer({
   limits: {
-    fileSize: 5 * 1024 * 1024,
+    fileSize: ENV.MAX_JSON_UPLOAD_SIZE,
   },
   fileFilter(_req, file, callback) {
     if (file.mimetype !== "application/json") {

@@ -4,7 +4,6 @@ import { createId } from "@paralleldrive/cuid2";
 import { elasticSearch } from "#utils/elastic";
 import { INDEXES, ProductIndex } from "#utils/elastic/types";
 import { bulkCreateSchema } from "#utils/zod-schemas/products";
-import { ENV } from "#utils/config";
 
 export async function bulkCreate(req: Request, res: Response) {
   const file = req.file as Express.Multer.File | undefined;

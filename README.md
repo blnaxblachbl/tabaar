@@ -105,6 +105,12 @@ flowchart TD
 - **Asset Storage**: MinIO / AWS S3 SDK, Sharp
 - **Validation & Security**: Zod schemas, GraphQL Shield, JWT authentication, UUIDv7 API keys
 
+## Dashboard
+
+Tabaar provides dashboard. Check [this](https://github.com/blnaxblachbl/tabaar-dashboard) repo to get started.
+
+![Dashboard Interface](images/dashboard.png)
+
 ## Quick start
 
 1. Clone the repository.
@@ -145,8 +151,26 @@ npm run delpoy
 docker compose up -d
 ```
 
-## Dashboard
+## Configurations
 
-Tabaar provides dashboard. Check [this](https://github.com/blnaxblachbl/tabaar-dashboard) repo to get started.
-
-![Dashboard Interface](images/dashboard.png)
+| Key                       | Description                                                                                                        |
+| :------------------------ | :----------------------------------------------------------------------------------------------------------------- |
+| ACCESS_TOKEN_SECRET       | Secret key used for signing and verifying JWT access tokens.                                                       |
+| REFRESH_TOKEN_SECRET      | Secret key used for signing and verifying JWT refresh tokens.                                                      |
+| MAX_IMAGE_UPLOAD_SIZE     | Maximum allowed image upload size in bytes (optional, default: `20971520` [20 MB]).                                |
+| MAX_JSON_UPLOAD_SIZE      | Maximum allowed JSON request payload size in bytes (optional, default: `1048576` [1 MB]).                          |
+| CORS                      | Allowed CORS origins as a JSON array of strings (optional, default: `*`).                                          |
+| PORT                      | HTTP port for REST and GraphQL APIs (optional, default: `4000`).                                                   |
+| REST_API_ENABLED          | Flag to enable or disable the REST API (optional, default: `true`).                                                |
+| REST_API_PATH             | Base path prefix for REST API endpoints (optional, default: `/api`).                                               |
+| GRAPHQL_API_ENABLED       | Flag to enable or disable the GraphQL API (optional, default: `true`).                                             |
+| GRAPHQL_API_INTROSPECTION | Flag to enable or disable GraphQL schema introspection (optional, default: `true`).                                |
+| GRAPHQL_API_PATH          | Endpoint route path for GraphQL (optional, default: `/graphql`).                                                   |
+| GRPC_PORT                 | Port number for the gRPC server (optional, default: `4051`).                                                       |
+| GRPC_API_ENABLED          | Flag to enable or disable the gRPC server (optional, default: `true`).                                             |
+| GRPC_API_REFLECTION       | Flag to enable or disable gRPC server reflection for client discovery and debugging (optional, default: `true`).        |
+| SMPT_HOST                 | SMTP server host for outgoing email delivery (e.g. `smtp.gmail.com`).                                             |
+| SMPT_USER                 | Username for SMTP authentication.                                                                                  |
+| SMPT_PASS                 | Password or app password for SMTP authentication.                                                                  |
+| SMPT_PORT                 | Port number for the SMTP server (optional, default: `465`).                                                        |
+| SMPT_SENDER               | Sender email address used for outgoing emails.                                                                     |

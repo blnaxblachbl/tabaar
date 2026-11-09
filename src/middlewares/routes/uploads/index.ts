@@ -1,9 +1,11 @@
 import type { Request, Response, NextFunction } from "express";
 import multer, { MulterError } from "multer";
 
+import { ENV } from "#utils/config";
+
 const upload = multer({
   limits: {
-    fileSize: 20 * 1024 * 1024,
+    fileSize: ENV.MAX_IMAGE_UPLOAD_SIZE,
   },
   fileFilter(_req, file, callback) {
     if (file.mimetype.startsWith("image/")) {
