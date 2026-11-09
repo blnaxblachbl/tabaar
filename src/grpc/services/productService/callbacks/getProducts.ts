@@ -54,7 +54,7 @@ export const getProducts: handleUnaryCall<
       q: query,
       query: searchQuery,
       size: take,
-      sort: [{ createdAt: "desc" }],
+      sort: [{ createdAt: "desc" }, { id: "desc" }],
       fields: ["min_price", "max_price", "available"],
       rest_total_hits_as_int: true,
       scroll: "3m",
