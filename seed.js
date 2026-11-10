@@ -10,7 +10,7 @@ dotenvExpand.expand(dotenv.config());
 const client = new Client({ connectionString: process.env.DATABASE_URL });
 const minioClient = new MinioClient({
   endPoint: process.env.S3_ENDPOINT,
-  useSSL: process.env.S3_ENDPOINT.includes("https"),
+  useSSL: process.env.S3_USE_SSLE === "true",
   accessKey: process.env.S3_ACCESS_KEY,
   secretKey: process.env.S3_SECRET_KEY,
   port: process.env.S3_PORT ? Number(process.env.S3_PORT) : undefined,
