@@ -14,6 +14,8 @@ import { bulkCreate } from "./bulk/post";
 import { ENV } from "#utils/config";
 
 const productRouter = express.Router();
+const productPublicRouter = express.Router();
+
 const upload = multer({
   limits: {
     fileSize: ENV.MAX_JSON_UPLOAD_SIZE,
@@ -26,15 +28,16 @@ const upload = multer({
   },
 });
 
-productRouter.get("/", getProducts);
+productPublicRouter.get("/", getProducts);
+productPublicRouter.get("/scroll", getProductsByScrollId);
+productPublicRouter.get("/:id", getProductById);
+
 productRouter.post("/", createProduct);
-productRouter.get("/scroll", getProductsByScrollId);
 productRouter.post("/bulk", upload.single("file"), bulkCreate);
-productRouter.get("/:id", getProductById);
 productRouter.put("/:id", updateProductById);
 productRouter.delete("/:id", deleteProductById);
 productRouter.post("/:id/variant", appendVariant);
 productRouter.put("/:id/variant/:variantId", updateVariant);
 productRouter.delete("/:id/variant/:variantId", deleteVariant);
 
-export { productRouter };
+export { productRouter, productPublicRouter };

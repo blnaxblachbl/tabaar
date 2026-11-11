@@ -3,7 +3,7 @@ import { handleUnaryCall, status } from "@grpc/grpc-js";
 import { GetOneProductRequest } from "#grpc/generated/GetOneProductRequest";
 import { GetOneProductResponse } from "#grpc/generated/GetOneProductResponse";
 import { stringIdInParams } from "#utils/zod-schemas/id-params";
-import { getApiKeyFromGrpc } from "#utils/grpc/getApiKey";
+// import { getApiKeyFromGrpc } from "#utils/grpc/getApiKey";
 import { INDEXES } from "#utils/elastic/types";
 import { elasticSearch } from "#utils/elastic";
 import { ProductIndex } from "#utils/elastic/types";
@@ -14,19 +14,19 @@ export const getOneProduct: handleUnaryCall<
   GetOneProductRequest,
   GetOneProductResponse
 > = async (call, callback) => {
-  const {
-    success: apiKeySuccess,
-    error: apiKeyError,
-    code,
-  } = await getApiKeyFromGrpc(call.metadata);
+  // const {
+  //   success: apiKeySuccess,
+  //   error: apiKeyError,
+  //   code,
+  // } = await getApiKeyFromGrpc(call.metadata);
 
-  if (!apiKeySuccess) {
-    callback({
-      code,
-      details: apiKeyError ?? "Something went wrong",
-    });
-    return;
-  }
+  // if (!apiKeySuccess) {
+  //   callback({
+  //     code,
+  //     details: apiKeyError ?? "Something went wrong",
+  //   });
+  //   return;
+  // }
   const { success, data, error } = stringIdInParams.safeParse(call.request);
   if (!success) {
     callback({

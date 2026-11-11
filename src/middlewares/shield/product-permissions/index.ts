@@ -1,11 +1,13 @@
+import { allow } from "graphql-shield";
+
 import { rules } from "#middlewares/shield/rules";
 import { ProductPermissions } from "./types";
 
 export const productPermissions: ProductPermissions = {
   Query: {
-    findProducts: rules.isAuthorized,
-    scrollProducts: rules.isAuthorized,
-    findOneProduct: rules.isAuthorized,
+    findProducts: allow,
+    scrollProducts: allow,
+    findOneProduct: allow,
   },
   Mutation: {
     createProduct: rules.isAuthorized,
