@@ -8,6 +8,8 @@ export const productPermissions: ProductPermissions = {
     findProducts: allow,
     scrollProducts: allow,
     findOneProduct: allow,
+    findDeletedProducts: rules.isAuthorized,
+    scrollDeletedProducts: rules.isAuthorized,
   },
   Mutation: {
     createProduct: rules.isAuthorized,
@@ -16,5 +18,6 @@ export const productPermissions: ProductPermissions = {
     appendVariant: rules.isAuthorized,
     updateVariant: rules.isAuthorized,
     deleteVariant: rules.isAuthorized,
+    restoreProduct: rules.isAuthorized,
   },
 };

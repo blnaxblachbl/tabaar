@@ -27,11 +27,12 @@ export function parseSource(source: ProductIndex): ProductFull {
 
 export function getProductsQuery(
   filters?: FiltersInput,
+  deleted: boolean = false,
 ): QueryDslQueryContainer {
   const filter: QueryDslQueryContainer[] = [
     {
       term: {
-        deleted: filters?.deleted === undefined ? false : filters.deleted,
+        deleted,
       },
     },
   ];

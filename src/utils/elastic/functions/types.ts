@@ -2,7 +2,6 @@ import { Characterstic } from "#graphql/Scalars/Characteristic/types";
 
 export type FiltersInput = {
   available?: boolean;
-  deleted?: boolean;
   minPrice?: {
     lte?: number;
     gte?: number;

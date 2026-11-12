@@ -3,7 +3,6 @@ import { GraphQLError } from "graphql";
 import { ProductResolvers } from "#graphql/Product/types";
 import { INDEXES } from "#utils/elastic/types";
 import { ProductIndex } from "#utils/elastic/types";
-import { selectToEsSource } from "#utils/tools/selectToEsSource";
 import { parseSource } from "#utils/elastic/functions";
 
 export const findOneProduct: ProductResolvers["Query"]["findOneProduct"] =
@@ -12,9 +11,9 @@ export const findOneProduct: ProductResolvers["Query"]["findOneProduct"] =
       const result = await elasticSearch.get<ProductIndex>({
         index: INDEXES.PRODUCTS,
         id,
-        _source: selectToEsSource(select),
+        _source: true,
       });
-      if (!result._source) {
+      if (!result._source || result._source.deleted) {
         throw new GraphQLError("Product not found");
       }
       return parseSource(result._source);
