@@ -30,6 +30,13 @@ export async function updateProductById(req: Request, res: Response) {
     });
   }
   try {
+    const exist = await elasticSearch.get<ProductIndex>({
+      id,
+      index: INDEXES.PRODUCTS,
+    });
+    if (!exist.found || exist._source?.deleted) {
+      return res.status(404).json({ message: "Product not found" });
+    }
     const result = await elasticSearch.update<
       ProductIndex,
       Partial<ProductIndex>,
@@ -38,7 +45,9 @@ export async function updateProductById(req: Request, res: Response) {
       id,
       index: INDEXES.PRODUCTS,
       doc: body,
-      _source: true,
+      _source: {
+        exclude: "deleted",
+      },
     });
     if (!result.get?._source || !["updated", "noop"].includes(result.result)) {
       console.error(result.result);
@@ -47,8 +56,11 @@ export async function updateProductById(req: Request, res: Response) {
       });
     }
     return res.status(200).json(parseSource(result.get._source));
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error(error);
+    if (error.meta?.statusCode === 404) {
+      return res.status(404).json({ message: "Product not found" });
+    }
     return res.status(500).json({
       message: "Failed to update product",
     });

@@ -27,7 +27,9 @@ export async function deleteProductById(req: Request, res: Response) {
       id,
       index: INDEXES.PRODUCTS,
       doc: { deleted: true },
-      _source: true,
+      _source: {
+        exclude: "deleted",
+      },
     });
     if (!result.get?._source || !["updated", "noop"].includes(result.result)) {
       console.error(result.result);

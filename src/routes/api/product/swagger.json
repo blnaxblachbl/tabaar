@@ -27,7 +27,7 @@
         "tags": ["Product"],
         "summary": "Search and filter products",
         "description": "Searches products in Elasticsearch with text query, pagination, and flexible filtering criteria.",
-        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "security": [],
         "parameters": [
           {
             "name": "query",
@@ -75,16 +75,6 @@
           },
           "400": {
             "description": "Invalid query parameters or filters",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -169,7 +159,7 @@
         "tags": ["Product"],
         "summary": "Scroll through product search results",
         "description": "Retrieves the next page of products using Elasticsearch scroll API.",
-        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "security": [],
         "parameters": [
           {
             "name": "scrollId",
@@ -296,11 +286,154 @@
         }
       }
     },
+    "/api/product/archive": {
+      "get": {
+        "tags": ["Product"],
+        "summary": "Search and filter archived products",
+        "description": "Searches products in Elasticsearch with text query, pagination, and flexible filtering criteria.",
+        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Elasticsearch text search query string",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Number of products to return (1 - 10,000, default 50)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10000,
+              "default": 50
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "description": "Optional product search filters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductFilters"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Products retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductsListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters or filters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Product"],
+        "summary": "Restore archived(deleted) product by ID",
+        "description": "Unmarks product document as deleted (`deleted: false`) in Elasticsearch.",
+        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Product CUID identifier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product marked as deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductFull"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid product ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to delete product / internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/product/{id}": {
       "get": {
         "tags": ["Product"],
         "summary": "Get product by ID",
-        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "security": [],
         "parameters": [
           {
             "name": "id",
@@ -1012,10 +1145,6 @@
           "available": {
             "type": "boolean",
             "example": true
-          },
-          "deleted": {
-            "type": "boolean",
-            "example": false
           },
           "minPrice": {
             "type": "object",

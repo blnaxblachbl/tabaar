@@ -7,7 +7,7 @@ import { authMiddleware } from "#middlewares/routes/auth";
 
 import { userRouter } from "#routes/api/user";
 import { apiKeyRouter } from "#routes/api/api-key";
-import { productRouter, productPublicRouter } from "#routes/api/product";
+import { productRouter } from "#routes/api/product";
 import { uploadRouter } from "#routes/api/upload";
 import { imageRouter } from "#routes/api/image";
 
@@ -22,8 +22,7 @@ const apiRouter = express.Router();
 
 apiRouter.use("/user", userRouteMiddleware, userRouter);
 apiRouter.use("/api-key", authMiddleware, apiKeyRouter);
-apiRouter.use("/product", productPublicRouter);
-apiRouter.use("/product", authMiddleware, productRouter);
+apiRouter.use("/product", productRouter);
 apiRouter.use("/upload", authMiddleware, uploadRouteMiddleware, uploadRouter);
 apiRouter.use("/image", imageRouter);
 

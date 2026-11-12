@@ -1,4 +1,5 @@
 import type { Request, Response } from "express";
+import type { ConnectionRequestResponse } from "@elastic/elasticsearch";
 
 import { elasticSearch } from "#utils/elastic";
 import { INDEXES, ProductIndex } from "#utils/elastic/types";
@@ -16,6 +17,7 @@ export async function getProductById(req: Request, res: Response) {
     const result = await elasticSearch.get<ProductIndex>({
       id: data.id,
       index: INDEXES.PRODUCTS,
+      _source_excludes: ["deleted"],
     });
     if (!result._source) {
       return res.status(404).json({ message: "Product not found" });
@@ -23,6 +25,9 @@ export async function getProductById(req: Request, res: Response) {
     res.json(parseSource(result._source));
   } catch (error) {
     console.error(error);
+    if (error.meta?.statusCode === 404) {
+      return res.status(404).json({ message: "Product not found" });
+    }
     return res.status(500).json({ message: "Internal server error" });
   }
 }

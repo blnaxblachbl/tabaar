@@ -37,6 +37,9 @@ export const getProducts = async (req: Request, res: Response) => {
       fields: ["min_price", "max_price", "available"],
       rest_total_hits_as_int: true,
       scroll: "3m",
+      _source: {
+        exclude: "deleted",
+      },
     });
     return res.status(200).json({
       products: result.hits.hits.map((hit) => ({
