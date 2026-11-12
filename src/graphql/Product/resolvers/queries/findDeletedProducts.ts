@@ -12,7 +12,7 @@ export const findDeletedProducts: ProductResolvers["Query"]["findDeletedProducts
       const result = await elasticSearch.search<ProductIndex>({
         index: INDEXES.PRODUCTS,
         q: query,
-        query: searchQuery,
+        post_filter: searchQuery,
         size: take,
         sort: [{ updatedAt: "desc" }, { id: "desc" }],
         _source: selectToEsSource(select?.products?.select),

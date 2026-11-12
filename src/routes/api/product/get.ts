@@ -31,7 +31,7 @@ export const getProducts = async (req: Request, res: Response) => {
     const result = await elasticSearch.search<ProductIndex>({
       index: INDEXES.PRODUCTS,
       q: query,
-      query: productQuery,
+      post_filter: productQuery,
       size: take,
       sort: [{ createdAt: "desc" }, { id: "desc" }],
       fields: ["min_price", "max_price", "available"],
