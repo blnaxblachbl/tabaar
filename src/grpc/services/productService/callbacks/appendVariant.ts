@@ -1,6 +1,7 @@
 import { handleUnaryCall, status } from "@grpc/grpc-js";
 import { createId } from "@paralleldrive/cuid2";
 import z from "zod";
+import { errors } from "@elastic/elasticsearch";
 
 import { AppendVariantRequest } from "#grpc/generated/AppendVariantRequest";
 import { AppendVariantResponse } from "#grpc/generated/AppendVariantResponse";
@@ -109,13 +110,15 @@ export const appendVariant: handleUnaryCall<
         available,
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error(error);
-    if (error.meta?.statusCode === 404) {
-      return callback({
-        code: status.NOT_FOUND,
-        details: "Product not found",
-      });
+    if (error instanceof errors.ResponseError) {
+      if (error.meta.statusCode === 404) {
+        return callback({
+          code: status.NOT_FOUND,
+          details: "Product not found",
+        });
+      }
     }
     callback({
       code: status.INTERNAL,

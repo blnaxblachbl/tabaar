@@ -2,7 +2,6 @@ import { handleUnaryCall, status } from "@grpc/grpc-js";
 
 import { ScrollProductsRequest } from "#grpc/generated/ScrollProductsRequest";
 import { GetProductsResponse } from "#grpc/generated/GetProductsResponse";
-// import { getApiKeyFromGrpc } from "#utils/grpc/getApiKey";
 import { elasticSearch } from "#utils/elastic";
 import { ProductIndex } from "#utils/elastic/types";
 import { createGrpcProduct } from "#utils/grpc/product";
@@ -12,19 +11,6 @@ export const scrollProducts: handleUnaryCall<
   ScrollProductsRequest,
   GetProductsResponse
 > = async (call, callback) => {
-  // const {
-  //   success: apiKeySuccess,
-  //   error: apiKeyError,
-  //   code,
-  // } = await getApiKeyFromGrpc(call.metadata);
-
-  // if (!apiKeySuccess) {
-  //   callback({
-  //     code,
-  //     details: apiKeyError ?? "Something went wrong",
-  //   });
-  //   return;
-  // }
   const { success, data, error } = scrollSchema.safeParse(call.request);
 
   if (!success) {

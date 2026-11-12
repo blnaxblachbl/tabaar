@@ -1,5 +1,6 @@
 import { handleUnaryCall, status } from "@grpc/grpc-js";
 import z from "zod";
+import { errors } from "@elastic/elasticsearch";
 
 import { UpdateProductRequest } from "#grpc/generated/UpdateProductRequest";
 import { UpdateProductResponse } from "#grpc/generated/UpdateProductResponse";
@@ -84,11 +85,13 @@ export const updateProduct: handleUnaryCall<
     });
   } catch (e) {
     console.error(e);
-    if (e.meta?.statusCode === 404) {
-      return callback({
-        code: status.NOT_FOUND,
-        details: "Product not found",
-      });
+    if (e instanceof errors.ResponseError) {
+      if (e.meta?.statusCode === 404) {
+        return callback({
+          code: status.NOT_FOUND,
+          details: "Product not found",
+        });
+      }
     }
     callback({
       code: status.INTERNAL,
