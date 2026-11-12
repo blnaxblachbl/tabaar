@@ -40,11 +40,18 @@ export default gql`
     ): ProductResult!
     scrollProducts(scrollId: String): ProductResult!
     findOneProduct(id: String): Product!
+    findDeletedProducts(
+      query: String
+      take: Int
+      filters: FiltersInput
+    ): ProductResult!
+    scrollDeletedProducts(scrollId: String): ProductResult!
   }
   type Mutation {
     createProduct(data: CreateProductInput!): Product!
     updateProduct(id: String!, data: UpdateProductInput!): Product!
     deleteProduct(id: String!): Product!
+    restoreProduct(id: String!): Product!
     appendVariant(id: String!, data: CreateVariantInput!): Product!
     deleteVariant(id: String!, variantId: String!): Product!
     updateVariant(

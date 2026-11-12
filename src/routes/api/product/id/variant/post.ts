@@ -38,6 +38,13 @@ export async function appendVariant(req: Request, res: Response) {
       images: [],
       ...bodyData,
     };
+    const exist = await elasticSearch.get<ProductIndex>({
+      id,
+      index: INDEXES.PRODUCTS,
+    });
+    if (!exist.found || exist._source?.deleted) {
+      return res.status(404).json({ message: "Product not found" });
+    }
     const result = await elasticSearch.update<
       ProductIndex,
       Partial<ProductIndex>,
@@ -52,7 +59,9 @@ export async function appendVariant(req: Request, res: Response) {
           variant,
         },
       },
-      _source: true,
+      _source: {
+        exclude: "deleted",
+      },
     });
     if (!result.get?._source || !["updated", "noop"].includes(result.result)) {
       console.error(result.result);

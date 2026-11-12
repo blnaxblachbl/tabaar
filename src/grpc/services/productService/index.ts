@@ -14,6 +14,9 @@ import { deleteProduct } from "./callbacks/deleteProduct";
 import { appendVariant } from "./callbacks/appendVariant";
 import { updateVariant } from "./callbacks/updateVariant";
 import { deleteVariant } from "./callbacks/deleteVariant";
+import { getArchivedProducts } from "./callbacks/getArchivedProducts";
+import { scrollArchivedProducts } from "./callbacks/scrollArchivedProduct";
+import { restoreProduct } from "./callbacks/restoreProduct";
 
 export function productService(server: Server, definition: PackageDefinition) {
   const proto = loadPackageDefinition(definition);
@@ -22,7 +25,9 @@ export function productService(server: Server, definition: PackageDefinition) {
     (proto.ProductService as ServiceClientConstructor).service,
     {
       getProducts,
+      getArchivedProducts,
       scrollProducts,
+      scrollArchivedProducts,
       getOneProduct,
       createProduct,
       updateProduct,
@@ -30,6 +35,7 @@ export function productService(server: Server, definition: PackageDefinition) {
       appendVariant,
       updateVariant,
       deleteVariant,
+      restoreProduct,
     },
   );
 }

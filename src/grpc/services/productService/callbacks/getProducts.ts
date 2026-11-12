@@ -5,7 +5,6 @@ import { GetProductsRequest } from "#grpc/generated/GetProductsRequest";
 import { GetProductsResponse } from "#grpc/generated/GetProductsResponse";
 import { searchSchema } from "#utils/zod-schemas/skip-take";
 import { filtersSchema } from "#utils/zod-schemas/products";
-import { getApiKeyFromGrpc } from "#utils/grpc/getApiKey";
 import { INDEXES } from "#utils/elastic/types";
 import { elasticSearch } from "#utils/elastic";
 import { ProductIndex } from "#utils/elastic/types";
@@ -16,20 +15,6 @@ export const getProducts: handleUnaryCall<
   GetProductsRequest,
   GetProductsResponse
 > = async (call, callback) => {
-  const {
-    success: apiKeySuccess,
-    error: apiKeyError,
-    code,
-  } = await getApiKeyFromGrpc(call.metadata);
-
-  if (!apiKeySuccess) {
-    callback({
-      code,
-      details: apiKeyError ?? "Something went wrong",
-    });
-    return;
-  }
-
   const { success, data, error } = z
     .intersection(
       searchSchema,
@@ -52,12 +37,15 @@ export const getProducts: handleUnaryCall<
     const result = await elasticSearch.search<ProductIndex>({
       index: INDEXES.PRODUCTS,
       q: query,
-      query: searchQuery,
+      post_filter: searchQuery,
       size: take,
       sort: [{ createdAt: "desc" }, { id: "desc" }],
       fields: ["min_price", "max_price", "available"],
       rest_total_hits_as_int: true,
       scroll: "3m",
+      _source: {
+        exclude: "deleted",
+      },
     });
     callback(null, {
       products: result.hits.hits.map((hit) => ({

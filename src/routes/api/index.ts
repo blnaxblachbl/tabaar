@@ -22,7 +22,7 @@ const apiRouter = express.Router();
 
 apiRouter.use("/user", userRouteMiddleware, userRouter);
 apiRouter.use("/api-key", authMiddleware, apiKeyRouter);
-apiRouter.use("/product", authMiddleware, productRouter);
+apiRouter.use("/product", productRouter);
 apiRouter.use("/upload", authMiddleware, uploadRouteMiddleware, uploadRouter);
 apiRouter.use("/image", imageRouter);
 

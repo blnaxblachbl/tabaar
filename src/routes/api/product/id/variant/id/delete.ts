@@ -21,6 +21,13 @@ export async function deleteVariant(req: Request, res: Response) {
   const { id, variantId } = params;
 
   try {
+    const exist = await elasticSearch.get<ProductIndex>({
+      id,
+      index: INDEXES.PRODUCTS,
+    });
+    if (!exist.found || exist._source?.deleted) {
+      return res.status(404).json({ message: "Product not found" });
+    }
     const result = await elasticSearch.update<
       ProductIndex,
       Partial<ProductIndex>,
@@ -35,7 +42,9 @@ export async function deleteVariant(req: Request, res: Response) {
           variantId,
         },
       },
-      _source: true,
+      _source: {
+        exclude: "deleted",
+      },
     });
     if (!result.get?._source || !["updated", "noop"].includes(result.result)) {
       console.error(result.result);

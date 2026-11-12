@@ -5,7 +5,7 @@ import { parseSource } from "#utils/elastic/functions";
 import { ProductResolvers } from "#graphql/Product/types";
 
 export const deleteProduct: ProductResolvers["Mutation"]["deleteProduct"] =
-  async (_, { id, select }, { elasticSearch }) => {
+  async (_, { id }, { elasticSearch }) => {
     try {
       const result = await elasticSearch.update<
         ProductIndex,

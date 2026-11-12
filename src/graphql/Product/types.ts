@@ -1,21 +1,32 @@
 import { Characterstic } from "#graphql/Scalars/Characteristic/types";
-import { ShieldedResolver } from "#graphql/types";
+import { ShieldedResolver, Resolver } from "#graphql/types";
 import {
   ProductFields,
   VariantFields,
-  ProductFull
+  ProductFull,
 } from "#utils/elastic/types";
 
 export type ProductResolvers = {
   Query: {
-    findProducts: ShieldedResolver<null, FindProductsArgs, ProductResult>;
-    scrollProducts: ShieldedResolver<null, ScrollProductsArgs, ProductResult>;
-    findOneProduct: ShieldedResolver<null, FindOneProductArgs, ProductFull>;
+    findProducts: Resolver<null, FindProductsArgs, ProductResult>;
+    scrollProducts: Resolver<null, ScrollProductsArgs, ProductResult>;
+    findOneProduct: Resolver<null, FindOneProductArgs, ProductFull>;
+    findDeletedProducts: ShieldedResolver<
+      null,
+      FindProductsArgs,
+      ProductResult
+    >;
+    scrollDeletedProducts: ShieldedResolver<
+      null,
+      ScrollProductsArgs,
+      ProductResult
+    >;
   };
   Mutation: {
     createProduct: ShieldedResolver<null, CreateProductArgs, ProductFull>;
     updateProduct: ShieldedResolver<null, UpdateProductArgs, ProductFull>;
     deleteProduct: ShieldedResolver<null, DeleteProductArgs, ProductFull>;
+    restoreProduct: ShieldedResolver<null, RestoreProductArgs, ProductFull>;
     appendVariant: ShieldedResolver<null, AppendVariantArgs, ProductFull>;
     deleteVariant: ShieldedResolver<null, DeleteVariantArgs, ProductFull>;
     updateVariant: ShieldedResolver<null, UpdateVariantArgs, ProductFull>;
@@ -29,6 +40,10 @@ type UpdateProductArgs = {
 };
 
 type DeleteProductArgs = {
+  id: string;
+  select?: ProdcutSelect;
+};
+type RestoreProductArgs = {
   id: string;
   select?: ProdcutSelect;
 };
@@ -78,7 +93,6 @@ type FindProductsArgs = {
 };
 export type FiltersInput = {
   available?: boolean;
-  deleted?: boolean;
   minPrice?: {
     lte?: number;
     gte?: number;

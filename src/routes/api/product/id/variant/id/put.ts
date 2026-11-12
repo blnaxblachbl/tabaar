@@ -26,6 +26,13 @@ export async function updateVariant(req: Request, res: Response) {
     });
   }
   try {
+    const exist = await elasticSearch.get<ProductIndex>({
+      id,
+      index: INDEXES.PRODUCTS,
+    });
+    if (!exist.found || exist._source?.deleted) {
+      return res.status(404).json({ message: "Product not found" });
+    }
     const result = await elasticSearch.update<
       ProductIndex,
       Partial<ProductIndex>,
@@ -42,7 +49,9 @@ export async function updateVariant(req: Request, res: Response) {
           data: bodyData,
         },
       },
-      _source: true,
+      _source: {
+        exclude: "deleted",
+      },
     });
     if (
       !result.get?._source ||

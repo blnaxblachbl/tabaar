@@ -4,16 +4,43 @@ import "google/protobuf/struct.proto";
 
 service ProductService {
   rpc GetProducts(GetProductsRequest) returns (GetProductsResponse);
+  rpc GetArchivedProducts(GetArchivedProductsRequest) returns (GetArchivedProductsResponse);
   rpc ScrollProducts(ScrollProductsRequest) returns (ScrollProductsResponse);
+  rpc ScrollArchivedProducts(ScrollArchivedProductsRequest) returns (ScrollArchivedProductsResponse);
   rpc GetOneProduct(GetOneProductRequest) returns (GetOneProductResponse);
   rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
   rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse);
   rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse);
+  rpc RestoreProduct(RestoreProductRequest) returns (RestoreProductResponse);
   rpc AppendVariant(AppendVariantRequest) returns (AppendVariantResponse);
   rpc UpdateVariant(UpdateVariantRequest) returns (UpdateVariantResponse);
   rpc DeleteVariant(DeleteVariantRequest) returns (DeleteVariantResponse);
 }
 
+message RestoreProductResponse {
+  Product product = 1;
+}
+message RestoreProductRequest {
+  string id = 1;
+}
+message ScrollArchivedProductsResponse {
+  repeated Product products = 1;
+  int32 products_count = 2;
+  string scroll_id = 3;
+}
+message ScrollArchivedProductsRequest {
+  string scroll_id = 1;
+}
+message GetArchivedProductsRequest {
+  optional string query = 1;
+  optional int32 take = 2;
+  optional ProductsFilter filters = 3;
+}
+message GetArchivedProductsResponse {
+  repeated Product products = 1;
+  int32 products_count = 2;
+  string scroll_id = 3;
+}
 message DeleteVariantResponse {
   Product product = 1;
 }
@@ -94,8 +121,8 @@ message Variant {
   repeated string images = 10;
 }
 message LocaleContent {
-    string locale = 1;
-    string content = 2;
+  string locale = 1;
+  string content = 2;
 }
 message Product {
   string id = 1;

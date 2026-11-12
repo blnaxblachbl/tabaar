@@ -15,7 +15,7 @@ export const findProducts: ProductResolvers["Query"]["findProducts"] = async (
     const result = await elasticSearch.search<ProductIndex>({
       index: INDEXES.PRODUCTS,
       q: query,
-      query: searchQuery,
+      post_filter: searchQuery,
       size: take,
       sort: [{ createdAt: "desc" }, { id: "desc" }],
       _source: selectToEsSource(select?.products?.select),

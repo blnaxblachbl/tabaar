@@ -28,7 +28,7 @@ export default gql`
     currency: String
   }
   input FiltersInput {
-    deleted: Boolean
+    deleted: Boolean @deprecated(reason: "Use separete query instead.")
     available: Boolean
     minPrice: FloatRangeInput
     maxPrice: FloatRangeInput

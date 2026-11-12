@@ -11,9 +11,14 @@ import { appendVariant } from "./id/variant/post";
 import { updateVariant } from "./id/variant/id/put";
 import { deleteVariant } from "./id/variant/id/delete";
 import { bulkCreate } from "./bulk/post";
+import { getArchivedProducts } from "./archive/get";
+import { restoreProductById } from "./archive/id/post";
+
 import { ENV } from "#utils/config";
+import { authMiddleware } from "#middlewares/routes/auth";
 
 const productRouter = express.Router();
+
 const upload = multer({
   limits: {
     fileSize: ENV.MAX_JSON_UPLOAD_SIZE,
@@ -26,15 +31,17 @@ const upload = multer({
   },
 });
 
-productRouter.get("/", getProducts);
-productRouter.post("/", createProduct);
-productRouter.get("/scroll", getProductsByScrollId);
-productRouter.post("/bulk", upload.single("file"), bulkCreate);
-productRouter.get("/:id", getProductById);
-productRouter.put("/:id", updateProductById);
-productRouter.delete("/:id", deleteProductById);
-productRouter.post("/:id/variant", appendVariant);
-productRouter.put("/:id/variant/:variantId", updateVariant);
-productRouter.delete("/:id/variant/:variantId", deleteVariant);
+productRouter.get("/", getProducts); // public api
+productRouter.post("/", authMiddleware, createProduct);
+productRouter.get("/scroll", getProductsByScrollId); // public api
+productRouter.post("/bulk", authMiddleware, upload.single("file"), bulkCreate);
+productRouter.get("/archive", authMiddleware, getArchivedProducts);
+productRouter.post("/archive/:id", authMiddleware, restoreProductById);
+productRouter.get("/:id", getProductById); // public api
+productRouter.put("/:id", authMiddleware, updateProductById);
+productRouter.delete("/:id", authMiddleware, deleteProductById);
+productRouter.post("/:id/variant", authMiddleware, appendVariant);
+productRouter.put("/:id/variant/:variantId", authMiddleware, updateVariant);
+productRouter.delete("/:id/variant/:variantId", authMiddleware, deleteVariant);
 
 export { productRouter };

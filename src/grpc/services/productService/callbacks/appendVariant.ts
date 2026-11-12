@@ -1,6 +1,7 @@
 import { handleUnaryCall, status } from "@grpc/grpc-js";
 import { createId } from "@paralleldrive/cuid2";
 import z from "zod";
+import { errors } from "@elastic/elasticsearch";
 
 import { AppendVariantRequest } from "#grpc/generated/AppendVariantRequest";
 import { AppendVariantResponse } from "#grpc/generated/AppendVariantResponse";
@@ -62,6 +63,16 @@ export const appendVariant: handleUnaryCall<
     ...variantData,
   };
   try {
+    const exist = await elasticSearch.get<ProductIndex>({
+      id: productId,
+      index: INDEXES.PRODUCTS,
+    });
+    if (!exist.found || exist._source?.deleted) {
+      return callback({
+        code: status.NOT_FOUND,
+        details: "Product not found",
+      });
+    }
     const result = await elasticSearch.update<
       ProductIndex,
       Partial<ProductIndex>,
@@ -76,7 +87,9 @@ export const appendVariant: handleUnaryCall<
           variant,
         },
       },
-      _source: true,
+      _source: {
+        exclude: "deleted",
+      },
     });
     if (!result.get?._source || !["updated", "noop"].includes(result.result)) {
       console.error(result.result);
@@ -97,7 +110,16 @@ export const appendVariant: handleUnaryCall<
         available,
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
+    console.error(error);
+    if (error instanceof errors.ResponseError) {
+      if (error.meta.statusCode === 404) {
+        return callback({
+          code: status.NOT_FOUND,
+          details: "Product not found",
+        });
+      }
+    }
     callback({
       code: status.INTERNAL,
       details: "Internal server error",

@@ -6,7 +6,7 @@ import { parseSource } from "#utils/elastic/functions";
 import { ProductResolvers } from "#graphql/Product/types";
 
 export const updateProduct: ProductResolvers["Mutation"]["updateProduct"] =
-  async (_, { id, data, select }, { elasticSearch }) => {
+  async (_, { id, data }, { elasticSearch }) => {
     try {
       const {
         success: updateSuccess,
@@ -17,6 +17,14 @@ export const updateProduct: ProductResolvers["Mutation"]["updateProduct"] =
         throw new GraphQLError(
           updateError?.issues[0]?.message ?? "Invalid input",
         );
+      }
+      const exist = await elasticSearch.get<ProductIndex>({
+        id,
+        index: INDEXES.PRODUCTS,
+        _source: true,
+      });
+      if (!exist.found || exist._source?.deleted) {
+        throw new GraphQLError("Product not found");
       }
       const result = await elasticSearch.update<
         ProductIndex,
