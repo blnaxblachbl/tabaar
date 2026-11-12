@@ -1,0 +1,3023 @@
+<!doctype html>
+
+<html>
+    <head>
+        <title>Protocol Documentation</title>
+        <meta charset="UTF-8" />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://fonts.googleapis.com/css?family=Ubuntu:400,700,400italic"
+        />
+        <style>
+            body {
+                width: 60em;
+                margin: 1em auto;
+                color: #222;
+                font-family: "Ubuntu", sans-serif;
+                padding-bottom: 4em;
+            }
+
+            h1 {
+                font-weight: normal;
+                border-bottom: 1px solid #aaa;
+                padding-bottom: 0.5ex;
+            }
+
+            h2 {
+                border-bottom: 1px solid #aaa;
+                padding-bottom: 0.5ex;
+                margin: 1.5em 0;
+            }
+
+            h3 {
+                font-weight: normal;
+                border-bottom: 1px solid #aaa;
+                padding-bottom: 0.5ex;
+            }
+
+            a {
+                text-decoration: none;
+                color: #567e25;
+            }
+
+            table {
+                width: 100%;
+                font-size: 80%;
+                border-collapse: collapse;
+            }
+
+            thead {
+                font-weight: 700;
+                background-color: #dcdcdc;
+            }
+
+            tbody tr:nth-child(even) {
+                background-color: #fbfbfb;
+            }
+
+            td {
+                border: 1px solid #ccc;
+                padding: 0.5ex 2ex;
+            }
+
+            td p {
+                text-indent: 1em;
+                margin: 0;
+            }
+
+            td p:nth-child(1) {
+                text-indent: 0;
+            }
+
+            .field-table td:nth-child(1) {
+                width: 10em;
+            }
+            .field-table td:nth-child(2) {
+                width: 10em;
+            }
+            .field-table td:nth-child(3) {
+                width: 6em;
+            }
+            .field-table td:nth-child(4) {
+                width: auto;
+            }
+
+            .extension-table td:nth-child(1) {
+                width: 10em;
+            }
+            .extension-table td:nth-child(2) {
+                width: 10em;
+            }
+            .extension-table td:nth-child(3) {
+                width: 10em;
+            }
+            .extension-table td:nth-child(4) {
+                width: 5em;
+            }
+            .extension-table td:nth-child(5) {
+                width: auto;
+            }
+
+            .enum-table td:nth-child(1) {
+                width: 10em;
+            }
+            .enum-table td:nth-child(2) {
+                width: 10em;
+            }
+            .enum-table td:nth-child(3) {
+                width: auto;
+            }
+
+            .scalar-value-types-table tr {
+                height: 3em;
+            }
+
+            #toc-container ul {
+                list-style-type: none;
+                padding-left: 1em;
+                line-height: 180%;
+                margin: 0;
+            }
+            #toc > li > a {
+                font-weight: bold;
+            }
+
+            .file-heading {
+                width: 100%;
+                display: table;
+                border-bottom: 1px solid #aaa;
+                margin: 4em 0 1.5em 0;
+            }
+            .file-heading h2 {
+                border: none;
+                display: table-cell;
+            }
+            .file-heading a {
+                text-align: right;
+                display: table-cell;
+            }
+
+            .badge {
+                width: 1.6em;
+                height: 1.6em;
+                display: inline-block;
+
+                line-height: 1.6em;
+                text-align: center;
+                font-weight: bold;
+                font-size: 60%;
+
+                color: #89ba48;
+                background-color: #dff0c8;
+
+                margin: 0.5ex 1em 0.5ex -1em;
+                border: 1px solid #fbfbfb;
+                border-radius: 1ex;
+            }
+        </style>
+
+        <link rel="stylesheet" type="text/css" href="stylesheet.css" />
+    </head>
+
+    <body>
+        <h1 id="title">Protocol Documentation</h1>
+
+        <h2>Table of Contents</h2>
+
+        <div id="toc-container">
+            <ul id="toc">
+                <li>
+                    <a href="#apiKey.proto">apiKey.proto</a>
+                    <ul>
+                        <li>
+                            <a href="#.ApiKey"
+                                ><span class="badge">M</span>ApiKey</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.CreateApiKeyRequest"
+                                ><span class="badge">M</span
+                                >CreateApiKeyRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.CreateApiKeyResponse"
+                                ><span class="badge">M</span
+                                >CreateApiKeyResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.DeleteApiKeyRequest"
+                                ><span class="badge">M</span
+                                >DeleteApiKeyRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.DeleteApiKeyResponse"
+                                ><span class="badge">M</span
+                                >DeleteApiKeyResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.GetApiKeysRequest"
+                                ><span class="badge">M</span
+                                >GetApiKeysRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.GetApiKeysResponse"
+                                ><span class="badge">M</span
+                                >GetApiKeysResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.GetOneApiKeyRequest"
+                                ><span class="badge">M</span
+                                >GetOneApiKeyRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.GetOneApiKeyResponse"
+                                ><span class="badge">M</span
+                                >GetOneApiKeyResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.UpdateApiKeyRequest"
+                                ><span class="badge">M</span
+                                >UpdateApiKeyRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a
+                                href="#.UpdateApiKeyRequest.UpdateApiKeyRequestData"
+                                ><span class="badge">M</span
+                                >UpdateApiKeyRequest.UpdateApiKeyRequestData</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.UpdateApiKeyResponse"
+                                ><span class="badge">M</span
+                                >UpdateApiKeyResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.ApiKeyService"
+                                ><span class="badge">S</span>ApiKeyService</a
+                            >
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#product.proto">product.proto</a>
+                    <ul>
+                        <li>
+                            <a href="#.AppendVariantRequest"
+                                ><span class="badge">M</span
+                                >AppendVariantRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.AppendVariantRequest.AppendVariantData"
+                                ><span class="badge">M</span
+                                >AppendVariantRequest.AppendVariantData</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.AppendVariantResponse"
+                                ><span class="badge">M</span
+                                >AppendVariantResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.CreateProductRequest"
+                                ><span class="badge">M</span
+                                >CreateProductRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.CreateProductResponse"
+                                ><span class="badge">M</span
+                                >CreateProductResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.DeleteProductRequest"
+                                ><span class="badge">M</span
+                                >DeleteProductRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.DeleteProductResponse"
+                                ><span class="badge">M</span
+                                >DeleteProductResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.DeleteVariantRequest"
+                                ><span class="badge">M</span
+                                >DeleteVariantRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.DeleteVariantResponse"
+                                ><span class="badge">M</span
+                                >DeleteVariantResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.FloatRangeInput"
+                                ><span class="badge">M</span>FloatRangeInput</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.GetArchivedProductsRequest"
+                                ><span class="badge">M</span
+                                >GetArchivedProductsRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.GetArchivedProductsResponse"
+                                ><span class="badge">M</span
+                                >GetArchivedProductsResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.GetOneProductRequest"
+                                ><span class="badge">M</span
+                                >GetOneProductRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.GetOneProductResponse"
+                                ><span class="badge">M</span
+                                >GetOneProductResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.GetProductsRequest"
+                                ><span class="badge">M</span
+                                >GetProductsRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.GetProductsResponse"
+                                ><span class="badge">M</span
+                                >GetProductsResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.IntRangeInput"
+                                ><span class="badge">M</span>IntRangeInput</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.LocaleContent"
+                                ><span class="badge">M</span>LocaleContent</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.Product"
+                                ><span class="badge">M</span>Product</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.ProductsFilter"
+                                ><span class="badge">M</span>ProductsFilter</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.RestoreProductRequest"
+                                ><span class="badge">M</span
+                                >RestoreProductRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.RestoreProductResponse"
+                                ><span class="badge">M</span
+                                >RestoreProductResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.ScrollArchivedProductsRequest"
+                                ><span class="badge">M</span
+                                >ScrollArchivedProductsRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.ScrollArchivedProductsResponse"
+                                ><span class="badge">M</span
+                                >ScrollArchivedProductsResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.ScrollProductsRequest"
+                                ><span class="badge">M</span
+                                >ScrollProductsRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.ScrollProductsResponse"
+                                ><span class="badge">M</span
+                                >ScrollProductsResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.UpdateProductRequest"
+                                ><span class="badge">M</span
+                                >UpdateProductRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a
+                                href="#.UpdateProductRequest.UpdateProductRequestData"
+                                ><span class="badge">M</span
+                                >UpdateProductRequest.UpdateProductRequestData</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.UpdateProductResponse"
+                                ><span class="badge">M</span
+                                >UpdateProductResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.UpdateVariantRequest"
+                                ><span class="badge">M</span
+                                >UpdateVariantRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.UpdateVariantRequest.UpdateVariantData"
+                                ><span class="badge">M</span
+                                >UpdateVariantRequest.UpdateVariantData</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.UpdateVariantResponse"
+                                ><span class="badge">M</span
+                                >UpdateVariantResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.Variant"
+                                ><span class="badge">M</span>Variant</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.VariantFilterInput"
+                                ><span class="badge">M</span
+                                >VariantFilterInput</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.ProductService"
+                                ><span class="badge">S</span>ProductService</a
+                            >
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#user.proto">user.proto</a>
+                    <ul>
+                        <li>
+                            <a href="#.CreateUserRequest"
+                                ><span class="badge">M</span
+                                >CreateUserRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.CreateUserResponse"
+                                ><span class="badge">M</span
+                                >CreateUserResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.DeleteUserRequest"
+                                ><span class="badge">M</span
+                                >DeleteUserRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.DeleteUserResponse"
+                                ><span class="badge">M</span
+                                >DeleteUserResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.GetOneUserRequest"
+                                ><span class="badge">M</span
+                                >GetOneUserRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.GetOneUserResponse"
+                                ><span class="badge">M</span
+                                >GetOneUserResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.GetUsersRequest"
+                                ><span class="badge">M</span>GetUsersRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.GetUsersResponse"
+                                ><span class="badge">M</span>GetUsersResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.UpdateUserRequest"
+                                ><span class="badge">M</span
+                                >UpdateUserRequest</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.UpdateUserRequest.UpdateUserRequestData"
+                                ><span class="badge">M</span
+                                >UpdateUserRequest.UpdateUserRequestData</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.UpdateUserResponse"
+                                ><span class="badge">M</span
+                                >UpdateUserResponse</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.User"
+                                ><span class="badge">M</span>User</a
+                            >
+                        </li>
+
+                        <li>
+                            <a href="#.UserService"
+                                ><span class="badge">S</span>UserService</a
+                            >
+                        </li>
+                    </ul>
+                </li>
+
+                <li><a href="#scalar-value-types">Scalar Value Types</a></li>
+            </ul>
+        </div>
+
+        <div class="file-heading">
+            <h2 id="apiKey.proto">apiKey.proto</h2>
+            <a href="#title">Top</a>
+        </div>
+        <p></p>
+
+        <h3 id=".ApiKey">ApiKey</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>created_at</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>updated_at</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>key</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>name</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>expired_at</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".CreateApiKeyRequest">CreateApiKeyRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>name</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>expired_at</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".CreateApiKeyResponse">CreateApiKeyResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>api_key</td>
+                    <td><a href="#ApiKey">ApiKey</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".DeleteApiKeyRequest">DeleteApiKeyRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".DeleteApiKeyResponse">DeleteApiKeyResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>api_key</td>
+                    <td><a href="#ApiKey">ApiKey</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".GetApiKeysRequest">GetApiKeysRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>skip</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>take</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".GetApiKeysResponse">GetApiKeysResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>api_keys</td>
+                    <td><a href="#ApiKey">ApiKey</a></td>
+                    <td>repeated</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>api_keys_count</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".GetOneApiKeyRequest">GetOneApiKeyRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".GetOneApiKeyResponse">GetOneApiKeyResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>api_key</td>
+                    <td><a href="#ApiKey">ApiKey</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".UpdateApiKeyRequest">UpdateApiKeyRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>data</td>
+                    <td>
+                        <a href="#UpdateApiKeyRequest.UpdateApiKeyRequestData"
+                            >UpdateApiKeyRequest.UpdateApiKeyRequestData</a
+                        >
+                    </td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".UpdateApiKeyRequest.UpdateApiKeyRequestData">
+            UpdateApiKeyRequest.UpdateApiKeyRequestData
+        </h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>name</td>
+                    <td><a href="#string">string</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>expired_at</td>
+                    <td><a href="#string">string</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".UpdateApiKeyResponse">UpdateApiKeyResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>api_key</td>
+                    <td><a href="#ApiKey">ApiKey</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".ApiKeyService">ApiKeyService</h3>
+        <p></p>
+        <table class="enum-table">
+            <thead>
+                <tr>
+                    <td>Method Name</td>
+                    <td>Request Type</td>
+                    <td>Response Type</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>GetApiKeys</td>
+                    <td><a href="#GetApiKeysRequest">.GetApiKeysRequest</a></td>
+                    <td>
+                        <a href="#GetApiKeysResponse">.GetApiKeysResponse</a>
+                    </td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>GetOneApiKey</td>
+                    <td>
+                        <a href="#GetOneApiKeyRequest">.GetOneApiKeyRequest</a>
+                    </td>
+                    <td>
+                        <a href="#GetOneApiKeyResponse"
+                            >.GetOneApiKeyResponse</a
+                        >
+                    </td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>CreateApiKey</td>
+                    <td>
+                        <a href="#CreateApiKeyRequest">.CreateApiKeyRequest</a>
+                    </td>
+                    <td>
+                        <a href="#CreateApiKeyResponse"
+                            >.CreateApiKeyResponse</a
+                        >
+                    </td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>UpdateApiKey</td>
+                    <td>
+                        <a href="#UpdateApiKeyRequest">.UpdateApiKeyRequest</a>
+                    </td>
+                    <td>
+                        <a href="#UpdateApiKeyResponse"
+                            >.UpdateApiKeyResponse</a
+                        >
+                    </td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>DeleteApiKey</td>
+                    <td>
+                        <a href="#DeleteApiKeyRequest">.DeleteApiKeyRequest</a>
+                    </td>
+                    <td>
+                        <a href="#DeleteApiKeyResponse"
+                            >.DeleteApiKeyResponse</a
+                        >
+                    </td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="file-heading">
+            <h2 id="product.proto">product.proto</h2>
+            <a href="#title">Top</a>
+        </div>
+        <p></p>
+
+        <h3 id=".AppendVariantRequest">AppendVariantRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>data</td>
+                    <td>
+                        <a href="#AppendVariantRequest.AppendVariantData"
+                            >AppendVariantRequest.AppendVariantData</a
+                        >
+                    </td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".AppendVariantRequest.AppendVariantData">
+            AppendVariantRequest.AppendVariantData
+        </h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>characterstics</td>
+                    <td>
+                        <a href="#google.protobuf.Struct"
+                            >google.protobuf.Struct</a
+                        >
+                    </td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>price</td>
+                    <td><a href="#double">double</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>count</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>currency</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".AppendVariantResponse">AppendVariantResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>product</td>
+                    <td><a href="#Product">Product</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".CreateProductRequest">CreateProductRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>name</td>
+                    <td><a href="#LocaleContent">LocaleContent</a></td>
+                    <td>repeated</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>description</td>
+                    <td><a href="#LocaleContent">LocaleContent</a></td>
+                    <td>repeated</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>characterstics</td>
+                    <td>
+                        <a href="#google.protobuf.Struct"
+                            >google.protobuf.Struct</a
+                        >
+                    </td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".CreateProductResponse">CreateProductResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>product</td>
+                    <td><a href="#Product">Product</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".DeleteProductRequest">DeleteProductRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".DeleteProductResponse">DeleteProductResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>product</td>
+                    <td><a href="#Product">Product</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".DeleteVariantRequest">DeleteVariantRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>variant_id</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".DeleteVariantResponse">DeleteVariantResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>product</td>
+                    <td><a href="#Product">Product</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".FloatRangeInput">FloatRangeInput</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>gte</td>
+                    <td><a href="#double">double</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>lte</td>
+                    <td><a href="#double">double</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".GetArchivedProductsRequest">GetArchivedProductsRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>query</td>
+                    <td><a href="#string">string</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>take</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>filters</td>
+                    <td><a href="#ProductsFilter">ProductsFilter</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".GetArchivedProductsResponse">GetArchivedProductsResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>products</td>
+                    <td><a href="#Product">Product</a></td>
+                    <td>repeated</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>products_count</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>scroll_id</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".GetOneProductRequest">GetOneProductRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".GetOneProductResponse">GetOneProductResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>product</td>
+                    <td><a href="#Product">Product</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".GetProductsRequest">GetProductsRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>query</td>
+                    <td><a href="#string">string</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>take</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>filters</td>
+                    <td><a href="#ProductsFilter">ProductsFilter</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".GetProductsResponse">GetProductsResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>products</td>
+                    <td><a href="#Product">Product</a></td>
+                    <td>repeated</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>products_count</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>scroll_id</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".IntRangeInput">IntRangeInput</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>gte</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>lte</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".LocaleContent">LocaleContent</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>locale</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>content</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".Product">Product</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>created_at</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>updated_at</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>name</td>
+                    <td><a href="#LocaleContent">LocaleContent</a></td>
+                    <td>repeated</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>description</td>
+                    <td><a href="#LocaleContent">LocaleContent</a></td>
+                    <td>repeated</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>characterstics</td>
+                    <td>
+                        <a href="#google.protobuf.Struct"
+                            >google.protobuf.Struct</a
+                        >
+                    </td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>max_price</td>
+                    <td><a href="#double">double</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>min_price</td>
+                    <td><a href="#double">double</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>available</td>
+                    <td><a href="#bool">bool</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>variants</td>
+                    <td><a href="#Variant">Variant</a></td>
+                    <td>repeated</td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".ProductsFilter">ProductsFilter</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>deleted</td>
+                    <td><a href="#bool">bool</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>available</td>
+                    <td><a href="#bool">bool</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>min_price</td>
+                    <td><a href="#FloatRangeInput">FloatRangeInput</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>max_price</td>
+                    <td><a href="#FloatRangeInput">FloatRangeInput</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>characterstics</td>
+                    <td>
+                        <a href="#google.protobuf.Struct"
+                            >google.protobuf.Struct</a
+                        >
+                    </td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>variants</td>
+                    <td>
+                        <a href="#VariantFilterInput">VariantFilterInput</a>
+                    </td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".RestoreProductRequest">RestoreProductRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".RestoreProductResponse">RestoreProductResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>product</td>
+                    <td><a href="#Product">Product</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".ScrollArchivedProductsRequest">
+            ScrollArchivedProductsRequest
+        </h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>scroll_id</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".ScrollArchivedProductsResponse">
+            ScrollArchivedProductsResponse
+        </h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>products</td>
+                    <td><a href="#Product">Product</a></td>
+                    <td>repeated</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>products_count</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>scroll_id</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".ScrollProductsRequest">ScrollProductsRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>scroll_id</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".ScrollProductsResponse">ScrollProductsResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>products</td>
+                    <td><a href="#Product">Product</a></td>
+                    <td>repeated</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>products_count</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>scroll_id</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".UpdateProductRequest">UpdateProductRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>data</td>
+                    <td>
+                        <a href="#UpdateProductRequest.UpdateProductRequestData"
+                            >UpdateProductRequest.UpdateProductRequestData</a
+                        >
+                    </td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".UpdateProductRequest.UpdateProductRequestData">
+            UpdateProductRequest.UpdateProductRequestData
+        </h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>name</td>
+                    <td><a href="#LocaleContent">LocaleContent</a></td>
+                    <td>repeated</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>description</td>
+                    <td><a href="#LocaleContent">LocaleContent</a></td>
+                    <td>repeated</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>characterstics</td>
+                    <td>
+                        <a href="#google.protobuf.Struct"
+                            >google.protobuf.Struct</a
+                        >
+                    </td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".UpdateProductResponse">UpdateProductResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>product</td>
+                    <td><a href="#Product">Product</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".UpdateVariantRequest">UpdateVariantRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>data</td>
+                    <td>
+                        <a href="#UpdateVariantRequest.UpdateVariantData"
+                            >UpdateVariantRequest.UpdateVariantData</a
+                        >
+                    </td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".UpdateVariantRequest.UpdateVariantData">
+            UpdateVariantRequest.UpdateVariantData
+        </h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>characterstics</td>
+                    <td>
+                        <a href="#google.protobuf.Struct"
+                            >google.protobuf.Struct</a
+                        >
+                    </td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>price</td>
+                    <td><a href="#double">double</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>count</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>currency</td>
+                    <td><a href="#string">string</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".UpdateVariantResponse">UpdateVariantResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>product</td>
+                    <td><a href="#Product">Product</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".Variant">Variant</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>created_at</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>updated_at</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>characterstics</td>
+                    <td>
+                        <a href="#google.protobuf.Struct"
+                            >google.protobuf.Struct</a
+                        >
+                    </td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>price</td>
+                    <td><a href="#double">double</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>count</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>currency</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>images</td>
+                    <td><a href="#string">string</a></td>
+                    <td>repeated</td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".VariantFilterInput">VariantFilterInput</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>characterstics</td>
+                    <td>
+                        <a href="#google.protobuf.Struct"
+                            >google.protobuf.Struct</a
+                        >
+                    </td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>currency</td>
+                    <td><a href="#string">string</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>price</td>
+                    <td><a href="#FloatRangeInput">FloatRangeInput</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>count</td>
+                    <td><a href="#IntRangeInput">IntRangeInput</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".ProductService">ProductService</h3>
+        <p></p>
+        <table class="enum-table">
+            <thead>
+                <tr>
+                    <td>Method Name</td>
+                    <td>Request Type</td>
+                    <td>Response Type</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>GetProducts</td>
+                    <td>
+                        <a href="#GetProductsRequest">.GetProductsRequest</a>
+                    </td>
+                    <td>
+                        <a href="#GetProductsResponse">.GetProductsResponse</a>
+                    </td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>GetArchivedProducts</td>
+                    <td>
+                        <a href="#GetArchivedProductsRequest"
+                            >.GetArchivedProductsRequest</a
+                        >
+                    </td>
+                    <td>
+                        <a href="#GetArchivedProductsResponse"
+                            >.GetArchivedProductsResponse</a
+                        >
+                    </td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>ScrollProducts</td>
+                    <td>
+                        <a href="#ScrollProductsRequest"
+                            >.ScrollProductsRequest</a
+                        >
+                    </td>
+                    <td>
+                        <a href="#ScrollProductsResponse"
+                            >.ScrollProductsResponse</a
+                        >
+                    </td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>ScrollArchivedProducts</td>
+                    <td>
+                        <a href="#ScrollArchivedProductsRequest"
+                            >.ScrollArchivedProductsRequest</a
+                        >
+                    </td>
+                    <td>
+                        <a href="#ScrollArchivedProductsResponse"
+                            >.ScrollArchivedProductsResponse</a
+                        >
+                    </td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>GetOneProduct</td>
+                    <td>
+                        <a href="#GetOneProductRequest"
+                            >.GetOneProductRequest</a
+                        >
+                    </td>
+                    <td>
+                        <a href="#GetOneProductResponse"
+                            >.GetOneProductResponse</a
+                        >
+                    </td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>CreateProduct</td>
+                    <td>
+                        <a href="#CreateProductRequest"
+                            >.CreateProductRequest</a
+                        >
+                    </td>
+                    <td>
+                        <a href="#CreateProductResponse"
+                            >.CreateProductResponse</a
+                        >
+                    </td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>UpdateProduct</td>
+                    <td>
+                        <a href="#UpdateProductRequest"
+                            >.UpdateProductRequest</a
+                        >
+                    </td>
+                    <td>
+                        <a href="#UpdateProductResponse"
+                            >.UpdateProductResponse</a
+                        >
+                    </td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>DeleteProduct</td>
+                    <td>
+                        <a href="#DeleteProductRequest"
+                            >.DeleteProductRequest</a
+                        >
+                    </td>
+                    <td>
+                        <a href="#DeleteProductResponse"
+                            >.DeleteProductResponse</a
+                        >
+                    </td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>RestoreProduct</td>
+                    <td>
+                        <a href="#RestoreProductRequest"
+                            >.RestoreProductRequest</a
+                        >
+                    </td>
+                    <td>
+                        <a href="#RestoreProductResponse"
+                            >.RestoreProductResponse</a
+                        >
+                    </td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>AppendVariant</td>
+                    <td>
+                        <a href="#AppendVariantRequest"
+                            >.AppendVariantRequest</a
+                        >
+                    </td>
+                    <td>
+                        <a href="#AppendVariantResponse"
+                            >.AppendVariantResponse</a
+                        >
+                    </td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>UpdateVariant</td>
+                    <td>
+                        <a href="#UpdateVariantRequest"
+                            >.UpdateVariantRequest</a
+                        >
+                    </td>
+                    <td>
+                        <a href="#UpdateVariantResponse"
+                            >.UpdateVariantResponse</a
+                        >
+                    </td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>DeleteVariant</td>
+                    <td>
+                        <a href="#DeleteVariantRequest"
+                            >.DeleteVariantRequest</a
+                        >
+                    </td>
+                    <td>
+                        <a href="#DeleteVariantResponse"
+                            >.DeleteVariantResponse</a
+                        >
+                    </td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="file-heading">
+            <h2 id="user.proto">user.proto</h2>
+            <a href="#title">Top</a>
+        </div>
+        <p></p>
+
+        <h3 id=".CreateUserRequest">CreateUserRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>name</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>email</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".CreateUserResponse">CreateUserResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>user</td>
+                    <td><a href="#User">User</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".DeleteUserRequest">DeleteUserRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".DeleteUserResponse">DeleteUserResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>user</td>
+                    <td><a href="#User">User</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".GetOneUserRequest">GetOneUserRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".GetOneUserResponse">GetOneUserResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>user</td>
+                    <td><a href="#User">User</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".GetUsersRequest">GetUsersRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>skip</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>take</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".GetUsersResponse">GetUsersResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>users</td>
+                    <td><a href="#User">User</a></td>
+                    <td>repeated</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>users_count</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".UpdateUserRequest">UpdateUserRequest</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>data</td>
+                    <td>
+                        <a href="#UpdateUserRequest.UpdateUserRequestData"
+                            >UpdateUserRequest.UpdateUserRequestData</a
+                        >
+                    </td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".UpdateUserRequest.UpdateUserRequestData">
+            UpdateUserRequest.UpdateUserRequestData
+        </h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>name</td>
+                    <td><a href="#string">string</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>email</td>
+                    <td><a href="#string">string</a></td>
+                    <td>optional</td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".UpdateUserResponse">UpdateUserResponse</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>user</td>
+                    <td><a href="#User">User</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".User">User</h3>
+        <p></p>
+
+        <table class="field-table">
+            <thead>
+                <tr>
+                    <td>Field</td>
+                    <td>Type</td>
+                    <td>Label</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td><a href="#int32">int32</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>created_at</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>updated_at</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>name</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>email</td>
+                    <td><a href="#string">string</a></td>
+                    <td></td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 id=".UserService">UserService</h3>
+        <p></p>
+        <table class="enum-table">
+            <thead>
+                <tr>
+                    <td>Method Name</td>
+                    <td>Request Type</td>
+                    <td>Response Type</td>
+                    <td>Description</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>GetUsers</td>
+                    <td><a href="#GetUsersRequest">.GetUsersRequest</a></td>
+                    <td><a href="#GetUsersResponse">.GetUsersResponse</a></td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>GetOneUser</td>
+                    <td><a href="#GetOneUserRequest">.GetOneUserRequest</a></td>
+                    <td>
+                        <a href="#GetOneUserResponse">.GetOneUserResponse</a>
+                    </td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>CreateUser</td>
+                    <td><a href="#CreateUserRequest">.CreateUserRequest</a></td>
+                    <td>
+                        <a href="#CreateUserResponse">.CreateUserResponse</a>
+                    </td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>UpdateUser</td>
+                    <td><a href="#UpdateUserRequest">.UpdateUserRequest</a></td>
+                    <td>
+                        <a href="#UpdateUserResponse">.UpdateUserResponse</a>
+                    </td>
+                    <td><p></p></td>
+                </tr>
+
+                <tr>
+                    <td>DeleteUser</td>
+                    <td><a href="#DeleteUserRequest">.DeleteUserRequest</a></td>
+                    <td>
+                        <a href="#DeleteUserResponse">.DeleteUserResponse</a>
+                    </td>
+                    <td><p></p></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 id="scalar-value-types">Scalar Value Types</h2>
+        <table class="scalar-value-types-table">
+            <thead>
+                <tr>
+                    <td>.proto Type</td>
+                    <td>Notes</td>
+                    <td>C++</td>
+                    <td>Java</td>
+                    <td>Python</td>
+                    <td>Go</td>
+                    <td>C#</td>
+                    <td>PHP</td>
+                    <td>Ruby</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="double">
+                    <td>double</td>
+                    <td></td>
+                    <td>double</td>
+                    <td>double</td>
+                    <td>float</td>
+                    <td>float64</td>
+                    <td>double</td>
+                    <td>float</td>
+                    <td>Float</td>
+                </tr>
+
+                <tr id="float">
+                    <td>float</td>
+                    <td></td>
+                    <td>float</td>
+                    <td>float</td>
+                    <td>float</td>
+                    <td>float32</td>
+                    <td>float</td>
+                    <td>float</td>
+                    <td>Float</td>
+                </tr>
+
+                <tr id="int32">
+                    <td>int32</td>
+                    <td>
+                        Uses variable-length encoding. Inefficient for encoding
+                        negative numbers – if your field is likely to have
+                        negative values, use sint32 instead.
+                    </td>
+                    <td>int32</td>
+                    <td>int</td>
+                    <td>int</td>
+                    <td>int32</td>
+                    <td>int</td>
+                    <td>integer</td>
+                    <td>Bignum or Fixnum (as required)</td>
+                </tr>
+
+                <tr id="int64">
+                    <td>int64</td>
+                    <td>
+                        Uses variable-length encoding. Inefficient for encoding
+                        negative numbers – if your field is likely to have
+                        negative values, use sint64 instead.
+                    </td>
+                    <td>int64</td>
+                    <td>long</td>
+                    <td>int/long</td>
+                    <td>int64</td>
+                    <td>long</td>
+                    <td>integer/string</td>
+                    <td>Bignum</td>
+                </tr>
+
+                <tr id="uint32">
+                    <td>uint32</td>
+                    <td>Uses variable-length encoding.</td>
+                    <td>uint32</td>
+                    <td>int</td>
+                    <td>int/long</td>
+                    <td>uint32</td>
+                    <td>uint</td>
+                    <td>integer</td>
+                    <td>Bignum or Fixnum (as required)</td>
+                </tr>
+
+                <tr id="uint64">
+                    <td>uint64</td>
+                    <td>Uses variable-length encoding.</td>
+                    <td>uint64</td>
+                    <td>long</td>
+                    <td>int/long</td>
+                    <td>uint64</td>
+                    <td>ulong</td>
+                    <td>integer/string</td>
+                    <td>Bignum or Fixnum (as required)</td>
+                </tr>
+
+                <tr id="sint32">
+                    <td>sint32</td>
+                    <td>
+                        Uses variable-length encoding. Signed int value. These
+                        more efficiently encode negative numbers than regular
+                        int32s.
+                    </td>
+                    <td>int32</td>
+                    <td>int</td>
+                    <td>int</td>
+                    <td>int32</td>
+                    <td>int</td>
+                    <td>integer</td>
+                    <td>Bignum or Fixnum (as required)</td>
+                </tr>
+
+                <tr id="sint64">
+                    <td>sint64</td>
+                    <td>
+                        Uses variable-length encoding. Signed int value. These
+                        more efficiently encode negative numbers than regular
+                        int64s.
+                    </td>
+                    <td>int64</td>
+                    <td>long</td>
+                    <td>int/long</td>
+                    <td>int64</td>
+                    <td>long</td>
+                    <td>integer/string</td>
+                    <td>Bignum</td>
+                </tr>
+
+                <tr id="fixed32">
+                    <td>fixed32</td>
+                    <td>
+                        Always four bytes. More efficient than uint32 if values
+                        are often greater than 2^28.
+                    </td>
+                    <td>uint32</td>
+                    <td>int</td>
+                    <td>int</td>
+                    <td>uint32</td>
+                    <td>uint</td>
+                    <td>integer</td>
+                    <td>Bignum or Fixnum (as required)</td>
+                </tr>
+
+                <tr id="fixed64">
+                    <td>fixed64</td>
+                    <td>
+                        Always eight bytes. More efficient than uint64 if values
+                        are often greater than 2^56.
+                    </td>
+                    <td>uint64</td>
+                    <td>long</td>
+                    <td>int/long</td>
+                    <td>uint64</td>
+                    <td>ulong</td>
+                    <td>integer/string</td>
+                    <td>Bignum</td>
+                </tr>
+
+                <tr id="sfixed32">
+                    <td>sfixed32</td>
+                    <td>Always four bytes.</td>
+                    <td>int32</td>
+                    <td>int</td>
+                    <td>int</td>
+                    <td>int32</td>
+                    <td>int</td>
+                    <td>integer</td>
+                    <td>Bignum or Fixnum (as required)</td>
+                </tr>
+
+                <tr id="sfixed64">
+                    <td>sfixed64</td>
+                    <td>Always eight bytes.</td>
+                    <td>int64</td>
+                    <td>long</td>
+                    <td>int/long</td>
+                    <td>int64</td>
+                    <td>long</td>
+                    <td>integer/string</td>
+                    <td>Bignum</td>
+                </tr>
+
+                <tr id="bool">
+                    <td>bool</td>
+                    <td></td>
+                    <td>bool</td>
+                    <td>boolean</td>
+                    <td>boolean</td>
+                    <td>bool</td>
+                    <td>bool</td>
+                    <td>boolean</td>
+                    <td>TrueClass/FalseClass</td>
+                </tr>
+
+                <tr id="string">
+                    <td>string</td>
+                    <td>
+                        A string must always contain UTF-8 encoded or 7-bit
+                        ASCII text.
+                    </td>
+                    <td>string</td>
+                    <td>String</td>
+                    <td>str/unicode</td>
+                    <td>string</td>
+                    <td>string</td>
+                    <td>string</td>
+                    <td>String (UTF-8)</td>
+                </tr>
+
+                <tr id="bytes">
+                    <td>bytes</td>
+                    <td>May contain any arbitrary sequence of bytes.</td>
+                    <td>string</td>
+                    <td>ByteString</td>
+                    <td>str</td>
+                    <td>[]byte</td>
+                    <td>ByteString</td>
+                    <td>string</td>
+                    <td>String (ASCII-8BIT)</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

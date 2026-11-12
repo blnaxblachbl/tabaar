@@ -57,6 +57,22 @@ export const updateVariant: handleUnaryCall<
   const { id, data: variantData } = data;
 
   try {
+    const exist = await elasticSearch.get<ProductIndex>({
+      id,
+      index: INDEXES.PRODUCTS,
+    });
+    if (!exist.found || exist._source?.deleted) {
+      return callback({
+        code: status.NOT_FOUND,
+        details: "Product not found",
+      });
+    }
+    if (!exist._source?.variants.some((v) => v.id === variantData.id)) {
+      return callback({
+        code: status.NOT_FOUND,
+        details: "Variant not found",
+      });
+    }
     const result = await elasticSearch.update<
       ProductIndex,
       Partial<ProductIndex>,
@@ -73,7 +89,9 @@ export const updateVariant: handleUnaryCall<
           data: variantData,
         },
       },
-      _source: true,
+      _source: {
+        exclude: "deleted",
+      },
     });
     if (!result.get?._source || !["updated", "noop"].includes(result.result)) {
       console.error(result.result);
@@ -88,6 +106,12 @@ export const updateVariant: handleUnaryCall<
     });
   } catch (e) {
     console.error(e);
+    if (e.meta?.statusCode === 404) {
+      return callback({
+        code: status.NOT_FOUND,
+        details: "Product not found",
+      });
+    }
     callback({
       code: status.INTERNAL,
       details: "Internal server error",

@@ -58,6 +58,9 @@ export const getProducts: handleUnaryCall<
       fields: ["min_price", "max_price", "available"],
       rest_total_hits_as_int: true,
       scroll: "3m",
+      _source: {
+        exclude: "deleted",
+      },
     });
     callback(null, {
       products: result.hits.hits.map((hit) => ({

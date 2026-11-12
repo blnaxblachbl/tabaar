@@ -49,6 +49,16 @@ export const updateProduct: handleUnaryCall<
   const { id, data } = parseData;
 
   try {
+    const exist = await elasticSearch.get<ProductIndex>({
+      id,
+      index: INDEXES.PRODUCTS,
+    });
+    if (!exist.found || exist._source?.deleted) {
+      return callback({
+        code: status.NOT_FOUND,
+        details: "Product not found",
+      });
+    }
     const result = await elasticSearch.update<
       ProductIndex,
       Partial<ProductIndex>,
@@ -57,7 +67,9 @@ export const updateProduct: handleUnaryCall<
       id,
       index: INDEXES.PRODUCTS,
       doc: data,
-      _source: true,
+      _source: {
+        exclude: "deleted",
+      },
     });
     if (!result.get?._source || !["updated", "noop"].includes(result.result)) {
       console.error(result.result);
@@ -72,6 +84,12 @@ export const updateProduct: handleUnaryCall<
     });
   } catch (e) {
     console.error(e);
+    if (e.meta?.statusCode === 404) {
+      return callback({
+        code: status.NOT_FOUND,
+        details: "Product not found",
+      });
+    }
     callback({
       code: status.INTERNAL,
       details: "Something went wrong",

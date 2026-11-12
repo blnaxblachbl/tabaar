@@ -42,8 +42,10 @@ export const deleteProduct: handleUnaryCall<
     >({
       id: data.id,
       index: INDEXES.PRODUCTS,
-      _source: true,
       doc: { deleted: true },
+      _source: {
+        exclude: "deleted",
+      },
     });
     if (!result.get?._source || !["updated", "noop"].includes(result.result)) {
       console.error(result.result);
@@ -58,6 +60,12 @@ export const deleteProduct: handleUnaryCall<
     });
   } catch (e) {
     console.error(e);
+    if (e.meta?.statusCode === 404) {
+      return callback({
+        code: status.NOT_FOUND,
+        details: "Product not found",
+      });
+    }
     callback({
       code: status.INTERNAL,
       details: "Internal server error",

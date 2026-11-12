@@ -39,7 +39,7 @@ export const getOneProduct: handleUnaryCall<
     const result = await elasticSearch.get<ProductIndex>({
       index: INDEXES.PRODUCTS,
       id: data.id,
-      _source: true,
+      _source_excludes: ["deleted"],
     });
     if (!result._source) {
       callback({
@@ -53,6 +53,12 @@ export const getOneProduct: handleUnaryCall<
     });
   } catch (e) {
     console.error(e);
+    if (e.meta?.statusCode === 404) {
+      return callback({
+        code: status.NOT_FOUND,
+        details: "Product not found",
+      });
+    }
     callback({
       code: status.INTERNAL,
       details: "Internal server error",
