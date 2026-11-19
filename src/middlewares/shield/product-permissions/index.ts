@@ -19,5 +19,6 @@ export const productPermissions: ProductPermissions = {
     updateVariant: rules.isAuthorized,
     deleteVariant: rules.isAuthorized,
     restoreProduct: rules.isAuthorized,
+    updateVariantsCount: rules.isAuthorized,
   },
 };

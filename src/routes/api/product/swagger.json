@@ -99,7 +99,14 @@
         "tags": ["Product"],
         "summary": "Create a product",
         "description": "Creates a new product document in Elasticsearch with a unique CUID.",
-        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "ApiKeyAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -220,7 +227,14 @@
         "tags": ["Product"],
         "summary": "Bulk create products from JSON file",
         "description": "Uploads a single JSON file (max 5MB) containing an array of products with their variants to be indexed in Elasticsearch.",
-        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "ApiKeyAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -291,7 +305,14 @@
         "tags": ["Product"],
         "summary": "Search and filter archived products",
         "description": "Searches products in Elasticsearch with text query, pagination, and flexible filtering criteria.",
-        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "ApiKeyAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "query",
@@ -373,7 +394,14 @@
         "tags": ["Product"],
         "summary": "Restore archived(deleted) product by ID",
         "description": "Unmarks product document as deleted (`deleted: false`) in Elasticsearch.",
-        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "ApiKeyAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -501,7 +529,14 @@
       "put": {
         "tags": ["Product"],
         "summary": "Update product by ID",
-        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "ApiKeyAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -570,7 +605,14 @@
         "tags": ["Product"],
         "summary": "Delete product by ID (soft delete)",
         "description": "Marks product document as deleted (`deleted: true`) in Elasticsearch.",
-        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "ApiKeyAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -631,7 +673,14 @@
         "tags": ["Product"],
         "summary": "Append variant to product",
         "description": "Appends a new variant to the product's variants array in Elasticsearch.",
-        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "ApiKeyAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -702,7 +751,14 @@
         "tags": ["Product"],
         "summary": "Update product variant",
         "description": "Updates fields of an existing variant within a product.",
-        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "ApiKeyAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -780,7 +836,14 @@
         "tags": ["Product"],
         "summary": "Delete product variant",
         "description": "Removes the specified variant from product's variants array in Elasticsearch.",
-        "security": [{ "BearerAuth": [] }, { "ApiKeyAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "ApiKeyAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -834,6 +897,92 @@
           },
           "500": {
             "description": "Failed to delete variant / internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/product/update-variants-count": {
+      "post": {
+        "tags": ["Product"],
+        "summary": "Update variant stock counts",
+        "description": "Atomically increments or decrements the stock count for one or more product variants. Supports negative values to decrease stock. Retries automatically on write conflicts (up to 3 times).",
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UpdateVariantsCountItem"
+                },
+                "minItems": 1,
+                "example": [
+                  {
+                    "id": "cm35n1234000008jp8p842abc",
+                    "variantId": "v1a2b3c4d5e6f7g8h9i0j",
+                    "value": -2
+                  },
+                  {
+                    "id": "cm35n1234000008jp8p842abc",
+                    "variantId": "v2b3c4d5e6f7g8h9i0j1k",
+                    "value": 5
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update results for each item (may include partial errors for individual items)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UpdateVariantsCountResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body, product not found, variant not found, or variant out of stock",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized — missing or invalid authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
             "content": {
               "application/json": {
                 "schema": {
@@ -916,9 +1065,15 @@
             "type": "object",
             "additionalProperties": {
               "oneOf": [
-                { "type": "string" },
-                { "type": "number" },
-                { "type": "boolean" }
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
               ]
             },
             "example": {
@@ -948,9 +1103,15 @@
             "type": "object",
             "additionalProperties": {
               "oneOf": [
-                { "type": "string" },
-                { "type": "number" },
-                { "type": "boolean" }
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
               ]
             },
             "example": {
@@ -979,9 +1140,15 @@
             "type": "object",
             "additionalProperties": {
               "oneOf": [
-                { "type": "string" },
-                { "type": "number" },
-                { "type": "boolean" }
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
               ]
             }
           }
@@ -1022,9 +1189,15 @@
             "type": "object",
             "additionalProperties": {
               "oneOf": [
-                { "type": "string" },
-                { "type": "number" },
-                { "type": "boolean" }
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
               ]
             },
             "example": {
@@ -1100,9 +1273,15 @@
             "type": "object",
             "additionalProperties": {
               "oneOf": [
-                { "type": "string" },
-                { "type": "number" },
-                { "type": "boolean" }
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
               ]
             },
             "example": {
@@ -1131,9 +1310,15 @@
             "type": "object",
             "additionalProperties": {
               "oneOf": [
-                { "type": "string" },
-                { "type": "number" },
-                { "type": "boolean" }
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
               ]
             }
           }
@@ -1149,53 +1334,83 @@
           "minPrice": {
             "type": "object",
             "properties": {
-              "lte": { "type": "number" },
-              "gte": { "type": "number" }
+              "lte": {
+                "type": "number"
+              },
+              "gte": {
+                "type": "number"
+              }
             }
           },
           "maxPrice": {
             "type": "object",
             "properties": {
-              "lte": { "type": "number" },
-              "gte": { "type": "number" }
+              "lte": {
+                "type": "number"
+              },
+              "gte": {
+                "type": "number"
+              }
             }
           },
           "characterstics": {
             "type": "object",
             "additionalProperties": {
               "oneOf": [
-                { "type": "string" },
-                { "type": "number" },
-                { "type": "boolean" }
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
               ]
             }
           },
           "variants": {
             "type": "object",
             "properties": {
-              "currency": { "type": "string" },
+              "currency": {
+                "type": "string"
+              },
               "characterstics": {
                 "type": "object",
                 "additionalProperties": {
                   "oneOf": [
-                    { "type": "string" },
-                    { "type": "number" },
-                    { "type": "boolean" }
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    }
                   ]
                 }
               },
               "count": {
                 "type": "object",
                 "properties": {
-                  "lte": { "type": "number" },
-                  "gte": { "type": "number" }
+                  "lte": {
+                    "type": "number"
+                  },
+                  "gte": {
+                    "type": "number"
+                  }
                 }
               },
               "price": {
                 "type": "object",
                 "properties": {
-                  "lte": { "type": "number" },
-                  "gte": { "type": "number" }
+                  "lte": {
+                    "type": "number"
+                  },
+                  "gte": {
+                    "type": "number"
+                  }
                 }
               }
             }
@@ -1238,9 +1453,15 @@
             "type": "object",
             "additionalProperties": {
               "oneOf": [
-                { "type": "string" },
-                { "type": "number" },
-                { "type": "boolean" }
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
               ]
             }
           },
@@ -1269,6 +1490,61 @@
           "error": {
             "type": "string",
             "example": "Error message description"
+          }
+        }
+      },
+      "UpdateVariantsCountItem": {
+        "type": "object",
+        "required": ["id", "variantId", "value"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Product ID",
+            "example": "cm35n1234000008jp8p842abc"
+          },
+          "variantId": {
+            "type": "string",
+            "description": "Variant ID within the product",
+            "example": "v1a2b3c4d5e6f7g8h9i0j"
+          },
+          "value": {
+            "type": "number",
+            "description": "Amount to add to the current stock count (use negative to decrease)",
+            "minimum": -100000,
+            "maximum": 100000,
+            "example": -2
+          }
+        }
+      },
+      "UpdateVariantsCountResponse": {
+        "type": "object",
+        "required": ["id", "variantId", "value", "status"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Product ID",
+            "example": "cm35n1234000008jp8p842abc"
+          },
+          "variantId": {
+            "type": "string",
+            "description": "Variant ID",
+            "example": "v1a2b3c4d5e6f7g8h9i0j"
+          },
+          "value": {
+            "type": "number",
+            "description": "The count delta that was applied",
+            "example": -2
+          },
+          "status": {
+            "type": "string",
+            "description": "Result of the update operation",
+            "enum": ["success", "error"],
+            "example": "success"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error reason (only present when status is 'error')",
+            "example": "Update conflict"
           }
         }
       }

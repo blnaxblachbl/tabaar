@@ -25,6 +25,8 @@ import type { UpdateProductRequest as _UpdateProductRequest, UpdateProductReques
 import type { UpdateProductResponse as _UpdateProductResponse, UpdateProductResponse__Output as _UpdateProductResponse__Output } from './UpdateProductResponse';
 import type { UpdateVariantRequest as _UpdateVariantRequest, UpdateVariantRequest__Output as _UpdateVariantRequest__Output } from './UpdateVariantRequest';
 import type { UpdateVariantResponse as _UpdateVariantResponse, UpdateVariantResponse__Output as _UpdateVariantResponse__Output } from './UpdateVariantResponse';
+import type { UpdateVariantsCountRequest as _UpdateVariantsCountRequest, UpdateVariantsCountRequest__Output as _UpdateVariantsCountRequest__Output } from './UpdateVariantsCountRequest';
+import type { UpdateVariantsCountResponse as _UpdateVariantsCountResponse, UpdateVariantsCountResponse__Output as _UpdateVariantsCountResponse__Output } from './UpdateVariantsCountResponse';
 
 export interface ProductServiceDefinition {
   AppendVariant: MethodDefinition<_AppendVariantRequest, _AppendVariantResponse, _AppendVariantRequest__Output, _AppendVariantResponse__Output>
@@ -39,4 +41,5 @@ export interface ProductServiceDefinition {
   ScrollProducts: MethodDefinition<_ScrollProductsRequest, _ScrollProductsResponse, _ScrollProductsRequest__Output, _ScrollProductsResponse__Output>
   UpdateProduct: MethodDefinition<_UpdateProductRequest, _UpdateProductResponse, _UpdateProductRequest__Output, _UpdateProductResponse__Output>
   UpdateVariant: MethodDefinition<_UpdateVariantRequest, _UpdateVariantResponse, _UpdateVariantRequest__Output, _UpdateVariantResponse__Output>
+  UpdateVariantsCount: MethodDefinition<_UpdateVariantsCountRequest, _UpdateVariantsCountResponse, _UpdateVariantsCountRequest__Output, _UpdateVariantsCountResponse__Output>
 }

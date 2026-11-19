@@ -168,3 +168,20 @@ export const bulkCreateSchema = z.array(
   }),
   "File should contains array of prod",
 );
+
+export const updateVariantsCountSchema = z
+  .array(
+    z.object(
+      {
+        id: z.string("Product ID should be a string"),
+        variantId: z.string("Variant ID should be a string"),
+        value: z
+          .number("Count value should be a number")
+          .min(-100_000, "Min count value is -100,000")
+          .max(100_000, "Max count value is 100,000"),
+      },
+      "Update variants count data is required",
+    ),
+    "Update variants count data should be an array",
+  )
+  .min(1, "Update variants count data can not be an empty array");

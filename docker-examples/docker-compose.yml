@@ -126,6 +126,7 @@ services:
     image: ghcr.io/blnaxblachbl/tabaar-service:latest
     ports:
       - "4000:4000"
+      - "4051:4051"
     env_file: .env.tabaar-service
     restart: unless-stopped
     depends_on:
@@ -134,7 +135,7 @@ services:
   tabaar-dashboard:
     image: ghcr.io/blnaxblachbl/tabaar-dashboard:latest
     ports:
-      - '${PORT:-3000}:3000'
+      - '3000:3000'
     env_file: .env.tabaar-dashboard
     restart: unless-stopped
     depends_on:

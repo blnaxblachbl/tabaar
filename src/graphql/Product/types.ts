@@ -30,9 +30,29 @@ export type ProductResolvers = {
     appendVariant: ShieldedResolver<null, AppendVariantArgs, ProductFull>;
     deleteVariant: ShieldedResolver<null, DeleteVariantArgs, ProductFull>;
     updateVariant: ShieldedResolver<null, UpdateVariantArgs, ProductFull>;
+    updateVariantsCount: ShieldedResolver<
+      null,
+      UpdateVariantsCountArgs,
+      UpdateVariantsCountResponse[]
+    >;
   };
 };
 
+type UpdateVariantsCountResponse = {
+  id: string;
+  variantId: string;
+  value: number;
+  status: string;
+  error?: string;
+};
+type UpdateVariantsCountArgs = {
+  data: {
+    id: string;
+    variantId: string;
+    value: number;
+  }[];
+  retryCount?: number;
+};
 type UpdateProductArgs = {
   id: string;
   data: Partial<ProductFields>;
