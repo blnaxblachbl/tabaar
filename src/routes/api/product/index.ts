@@ -9,6 +9,7 @@ import { updateProductById } from "./id/put";
 import { deleteProductById } from "./id/delete";
 import { appendVariant } from "./id/variant/post";
 import { updateVariant } from "./id/variant/id/put";
+import { updateVariantsCount } from "./updateCount/post";
 import { deleteVariant } from "./id/variant/id/delete";
 import { bulkCreate } from "./bulk/post";
 import { getArchivedProducts } from "./archive/get";
@@ -36,6 +37,11 @@ productRouter.post("/", authMiddleware, createProduct);
 productRouter.get("/scroll", getProductsByScrollId); // public api
 productRouter.post("/bulk", authMiddleware, upload.single("file"), bulkCreate);
 productRouter.get("/archive", authMiddleware, getArchivedProducts);
+productRouter.post(
+  "/update-variants-count",
+  authMiddleware,
+  updateVariantsCount,
+);
 productRouter.post("/archive/:id", authMiddleware, restoreProductById);
 productRouter.get("/:id", getProductById); // public api
 productRouter.put("/:id", authMiddleware, updateProductById);

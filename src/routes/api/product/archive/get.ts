@@ -8,8 +8,6 @@ import { filtersSchema } from "#utils/zod-schemas/products";
 import { getProductsQuery } from "#utils/elastic/functions";
 
 export const getArchivedProducts = async (req: Request, res: Response) => {
-  console.log("getArchivedProducts");
-
   const { success, data, error } = searchSchema.safeParse(req.query);
   if (!success) {
     return res.status(400).json({
