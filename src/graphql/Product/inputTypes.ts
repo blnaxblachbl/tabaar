@@ -28,7 +28,6 @@ export default gql`
     currency: String
   }
   input FiltersInput {
-    deleted: Boolean @deprecated(reason: "Use separete query instead.")
     available: Boolean
     minPrice: FloatRangeInput
     maxPrice: FloatRangeInput
@@ -40,5 +39,13 @@ export default gql`
     currency: String
     price: FloatRangeInput
     count: IntRangeInput
+  }
+  input UpdateVariantsCountInput {
+    "Product ID"
+    id: String!
+    "Variant ID"
+    variantId: String!
+    "Pass a value greater than 0 to increase, or a value less than 0 to decrease."
+    value: Int!
   }
 `;

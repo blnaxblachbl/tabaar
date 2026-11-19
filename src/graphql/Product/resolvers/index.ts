@@ -11,6 +11,7 @@ import { appendVariant } from "./mutations/appendVariant";
 import { deleteVariant } from "./mutations/deleteVariant";
 import { updateVariant } from "./mutations/updateVariant";
 import { restoreProduct } from "./mutations/restoreProduct";
+import { updateVariantsCount } from "./mutations/updateVariantsCount";
 
 import { ProductResolvers } from "../types";
 
@@ -30,5 +31,6 @@ export default {
     deleteVariant,
     updateVariant,
     restoreProduct,
+    updateVariantsCount,
   },
 } as ProductResolvers;

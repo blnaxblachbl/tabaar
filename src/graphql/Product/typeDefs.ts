@@ -32,6 +32,20 @@ export default gql`
     productsCount: Int!
     scrollId: String!
   }
+  type UpdateVariantsCountResponse {
+    id: String!
+    variantId: String!
+    value: Int!
+    """
+    The "Status" field may be an "error" or "success".
+    """
+    status: String!
+    """
+    The "Error" field may contain the message "Update conflict"
+    if the conflict was not resolved automatically.
+    """
+    error: String
+  }
   type Query {
     findProducts(
       query: String
@@ -59,5 +73,12 @@ export default gql`
       variantId: String!
       data: UpdateVariantInput!
     ): Product!
+    """
+    The "updateVariantsCount" allows update multiple pruduct variants count.
+    Usefull for update count on creating orders or refunds
+    """
+    updateVariantsCount(
+      data: [UpdateVariantsCountInput!]!
+    ): [UpdateVariantsCountResponse!]!
   }
 `;
