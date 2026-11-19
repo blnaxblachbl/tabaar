@@ -8,7 +8,7 @@ import { ProductIndex } from "#utils/elastic/types";
 import { ToUpdate, Response as UpdateResponse } from "./types";
 
 export async function updateVariantsCount(
-  req: Request & { retryCount?: number; prevResult: UpdateResponse[] },
+  req: Request & { retryCount?: number; prevResult?: UpdateResponse[] },
   res: Response,
 ) {
   const { elasticSearch } = await createContext({ req, res });
@@ -27,14 +27,17 @@ export async function updateVariantsCount(
     req.prevResult = [];
   }
 
-  const products: Record<string, typeof data> = data.reduce((acc, item) => {
-    if (!acc[item.id]) {
-      acc[item.id] = [item];
-    } else {
-      acc[item.id].push(item);
-    }
-    return acc;
-  }, {});
+  const products = data.reduce(
+    (acc, item) => {
+      if (!acc[item.id]) {
+        acc[item.id] = [item];
+      } else {
+        acc[item.id].push(item);
+      }
+      return acc;
+    },
+    {} as Record<string, typeof data>,
+  );
 
   const toUpdate: ToUpdate[] = [];
 

@@ -25,14 +25,14 @@ export const updateVariantsCount: ProductResolvers["Mutation"]["updateVariantsCo
     if (data.length === 0) {
       throw new GraphQLError("Data can not be an empty array");
     }
-    const products: Record<string, typeof data> = data.reduce((acc, item) => {
+    const products = data.reduce((acc, item) => {
       if (!acc[item.id]) {
         acc[item.id] = [item];
       } else {
         acc[item.id].push(item);
       }
       return acc;
-    }, {});
+    }, {} as Record<string, typeof data>);
 
     const toUpdate: ToUpdate[] = [];
 

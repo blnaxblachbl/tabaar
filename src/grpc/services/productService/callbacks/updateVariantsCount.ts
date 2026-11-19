@@ -68,14 +68,17 @@ async function updateCounts(
   error: Partial<StatusObject> | ServerErrorResponse | null;
   response?: UpdateVariantsCountResponse | null | undefined;
 }> {
-  const products: Record<string, typeof data> = data!.reduce((acc, item) => {
-    if (!acc[item.id]) {
-      acc[item.id] = [item];
-    } else {
-      acc[item.id].push(item);
-    }
-    return acc;
-  }, {});
+  const products: Record<string, typeof data> = data!.reduce(
+    (acc, item) => {
+      if (!acc[item.id]) {
+        acc[item.id] = [item];
+      } else {
+        acc[item.id].push(item);
+      }
+      return acc;
+    },
+    {} as Record<string, typeof data>,
+  );
 
   const toUpdate: ToUpdate[] = [];
 
