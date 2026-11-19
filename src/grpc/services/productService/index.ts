@@ -17,6 +17,7 @@ import { deleteVariant } from "./callbacks/deleteVariant";
 import { getArchivedProducts } from "./callbacks/getArchivedProducts";
 import { scrollArchivedProducts } from "./callbacks/scrollArchivedProduct";
 import { restoreProduct } from "./callbacks/restoreProduct";
+import { updateVariantsCount } from "./callbacks/updateVariantsCount";
 
 export function productService(server: Server, definition: PackageDefinition) {
   const proto = loadPackageDefinition(definition);
@@ -36,6 +37,7 @@ export function productService(server: Server, definition: PackageDefinition) {
       updateVariant,
       deleteVariant,
       restoreProduct,
+      updateVariantsCount,
     },
   );
 }

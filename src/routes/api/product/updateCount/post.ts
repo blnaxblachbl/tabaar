@@ -1,14 +1,11 @@
 import type { Request, Response } from "express";
 import { estypes } from "@elastic/elasticsearch";
-import z from "zod";
 
 import { updateVariantsCountSchema } from "#utils/zod-schemas/products";
 import { createContext } from "#utils/context";
 import { INDEXES } from "#utils/elastic/types";
 import { ProductIndex } from "#utils/elastic/types";
 import { ToUpdate, Response as UpdateResponse } from "./types";
-
-type Data = z.infer<typeof updateVariantsCountSchema>;
 
 export async function updateVariantsCount(
   req: Request & { retryCount?: number; prevResult: UpdateResponse[] },

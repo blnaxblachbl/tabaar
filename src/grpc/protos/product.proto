@@ -15,8 +15,27 @@ service ProductService {
   rpc AppendVariant(AppendVariantRequest) returns (AppendVariantResponse);
   rpc UpdateVariant(UpdateVariantRequest) returns (UpdateVariantResponse);
   rpc DeleteVariant(DeleteVariantRequest) returns (DeleteVariantResponse);
+  rpc UpdateVariantsCount(UpdateVariantsCountRequest) returns (UpdateVariantsCountResponse);
 }
 
+message UpdateVariantsCountResponse {
+  message UpdateVariantsCountResponseData {
+    string id = 1;
+    string variant_id = 2;
+    int32 value = 3;
+    string status = 4;
+    optional string error = 5;
+  }
+  repeated UpdateVariantsCountResponseData data = 1;
+}
+message UpdateVariantsCountRequest {
+  message UpdateVariantsCountRequestData {
+    string id = 1;
+    string variant_id = 2;
+    int32 value = 3;
+  }
+  repeated UpdateVariantsCountRequestData data = 1;
+}
 message RestoreProductResponse {
   Product product = 1;
 }
