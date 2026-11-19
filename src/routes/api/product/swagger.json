@@ -24,9 +24,7 @@
   "paths": {
     "/api/product": {
       "get": {
-        "tags": [
-          "Product"
-        ],
+        "tags": ["Product"],
         "summary": "Search and filter products",
         "description": "Searches products in Elasticsearch with text query, pagination, and flexible filtering criteria.",
         "security": [],
@@ -98,9 +96,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Product"
-        ],
+        "tags": ["Product"],
         "summary": "Create a product",
         "description": "Creates a new product document in Elasticsearch with a unique CUID.",
         "security": [
@@ -167,9 +163,7 @@
     },
     "/api/product/scroll": {
       "get": {
-        "tags": [
-          "Product"
-        ],
+        "tags": ["Product"],
         "summary": "Scroll through product search results",
         "description": "Retrieves the next page of products using Elasticsearch scroll API.",
         "security": [],
@@ -230,9 +224,7 @@
     },
     "/api/product/bulk": {
       "post": {
-        "tags": [
-          "Product"
-        ],
+        "tags": ["Product"],
         "summary": "Bulk create products from JSON file",
         "description": "Uploads a single JSON file (max 5MB) containing an array of products with their variants to be indexed in Elasticsearch.",
         "security": [
@@ -249,9 +241,7 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "file"
-                ],
+                "required": ["file"],
                 "properties": {
                   "file": {
                     "type": "string",
@@ -312,9 +302,7 @@
     },
     "/api/product/archive": {
       "get": {
-        "tags": [
-          "Product"
-        ],
+        "tags": ["Product"],
         "summary": "Search and filter archived products",
         "description": "Searches products in Elasticsearch with text query, pagination, and flexible filtering criteria.",
         "security": [
@@ -403,9 +391,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Product"
-        ],
+        "tags": ["Product"],
         "summary": "Restore archived(deleted) product by ID",
         "description": "Unmarks product document as deleted (`deleted: false`) in Elasticsearch.",
         "security": [
@@ -473,9 +459,7 @@
     },
     "/api/product/{id}": {
       "get": {
-        "tags": [
-          "Product"
-        ],
+        "tags": ["Product"],
         "summary": "Get product by ID",
         "security": [],
         "parameters": [
@@ -543,9 +527,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Product"
-        ],
+        "tags": ["Product"],
         "summary": "Update product by ID",
         "security": [
           {
@@ -620,9 +602,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Product"
-        ],
+        "tags": ["Product"],
         "summary": "Delete product by ID (soft delete)",
         "description": "Marks product document as deleted (`deleted: true`) in Elasticsearch.",
         "security": [
@@ -690,9 +670,7 @@
     },
     "/api/product/{id}/variant": {
       "post": {
-        "tags": [
-          "Product"
-        ],
+        "tags": ["Product"],
         "summary": "Append variant to product",
         "description": "Appends a new variant to the product's variants array in Elasticsearch.",
         "security": [
@@ -770,9 +748,7 @@
     },
     "/api/product/{id}/variant/{variantId}": {
       "put": {
-        "tags": [
-          "Product"
-        ],
+        "tags": ["Product"],
         "summary": "Update product variant",
         "description": "Updates fields of an existing variant within a product.",
         "security": [
@@ -857,9 +833,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Product"
-        ],
+        "tags": ["Product"],
         "summary": "Delete product variant",
         "description": "Removes the specified variant from product's variants array in Elasticsearch.",
         "security": [
@@ -936,9 +910,7 @@
     },
     "/api/product/update-variants-count": {
       "post": {
-        "tags": [
-          "Products"
-        ],
+        "tags": ["Product"],
         "summary": "Update variant stock counts",
         "description": "Atomically increments or decrements the stock count for one or more product variants. Supports negative values to decrease stock. Retries automatically on write conflicts (up to 3 times).",
         "security": [
@@ -1087,9 +1059,7 @@
             "items": {
               "type": "string"
             },
-            "example": [
-              "cl7y9a1bc000101q0..."
-            ]
+            "example": ["cl7y9a1bc000101q0..."]
           },
           "characterstics": {
             "type": "object",
@@ -1115,11 +1085,7 @@
       },
       "AppendVariantInput": {
         "type": "object",
-        "required": [
-          "price",
-          "count",
-          "currency"
-        ],
+        "required": ["price", "count", "currency"],
         "properties": {
           "price": {
             "type": "number",
@@ -1275,10 +1241,7 @@
       },
       "LocaleContent": {
         "type": "object",
-        "required": [
-          "locale",
-          "content"
-        ],
+        "required": ["locale", "content"],
         "properties": {
           "locale": {
             "type": "string",
@@ -1292,10 +1255,7 @@
       },
       "CreateProductInput": {
         "type": "object",
-        "required": [
-          "name",
-          "description"
-        ],
+        "required": ["name", "description"],
         "properties": {
           "name": {
             "type": "array",
@@ -1459,10 +1419,7 @@
       },
       "ProductsListResponse": {
         "type": "object",
-        "required": [
-          "products",
-          "productsCount"
-        ],
+        "required": ["products", "productsCount"],
         "properties": {
           "products": {
             "type": "array",
@@ -1482,11 +1439,7 @@
       },
       "BulkCreateProductItem": {
         "type": "object",
-        "required": [
-          "name",
-          "description",
-          "variants"
-        ],
+        "required": ["name", "description", "variants"],
         "properties": {
           "name": {
             "type": "string",
@@ -1522,9 +1475,7 @@
       },
       "ErrorMessage": {
         "type": "object",
-        "required": [
-          "message"
-        ],
+        "required": ["message"],
         "properties": {
           "message": {
             "type": "string",
@@ -1534,9 +1485,7 @@
       },
       "ErrorResponse": {
         "type": "object",
-        "required": [
-          "error"
-        ],
+        "required": ["error"],
         "properties": {
           "error": {
             "type": "string",
@@ -1546,11 +1495,7 @@
       },
       "UpdateVariantsCountItem": {
         "type": "object",
-        "required": [
-          "id",
-          "variantId",
-          "value"
-        ],
+        "required": ["id", "variantId", "value"],
         "properties": {
           "id": {
             "type": "string",
@@ -1573,12 +1518,7 @@
       },
       "UpdateVariantsCountResponse": {
         "type": "object",
-        "required": [
-          "id",
-          "variantId",
-          "value",
-          "status"
-        ],
+        "required": ["id", "variantId", "value", "status"],
         "properties": {
           "id": {
             "type": "string",
@@ -1598,10 +1538,7 @@
           "status": {
             "type": "string",
             "description": "Result of the update operation",
-            "enum": [
-              "success",
-              "error"
-            ],
+            "enum": ["success", "error"],
             "example": "success"
           },
           "error": {
