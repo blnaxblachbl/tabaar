@@ -3,13 +3,27 @@ import { Prisma } from "#utils/prisma/generated";
 
 export const findUsers: UserResolvers["Query"]["findUsers"] = async (
   _,
-  { select, skip = 0, take = 50 },
+  { select, filters, skip = 0, take = 50 },
   { prisma, verify },
 ) => {
   const where: Prisma.UserWhereInput = {
     id: { not: { equals: verify.id } },
-    deleted: { equals: false },
+    deleted: { equals: !!filters?.deleted },
   };
+  if (filters?.search) {
+    where.OR = [
+      {
+        name: {
+          contains: filters.search,
+          mode: "insensitive",
+        },
+        email: {
+          contains: filters.search,
+          mode: "insensitive",
+        },
+      },
+    ];
+  }
   const [users, usersCount] = await Promise.all([
     prisma.user.findMany({
       where,

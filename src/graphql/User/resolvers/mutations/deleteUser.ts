@@ -1,6 +1,7 @@
 import { GraphQLError } from "graphql";
 
 import { UserResolvers } from "#graphql/User/types";
+import { PrismaClientKnownRequestError } from "#utils/prisma/generated/runtime/client";
 
 export const deleteUser: UserResolvers["Mutation"]["deleteUser"] = async (
   _,
@@ -13,9 +14,19 @@ export const deleteUser: UserResolvers["Mutation"]["deleteUser"] = async (
   if (id === 1) {
     throw new GraphQLError("Cannot delete admin user");
   }
-  return prisma.user.update({
-    where: { id },
-    data: { deleted: true },
-    select,
-  });
+  try {
+    return prisma.user.update({
+      where: { id },
+      data: { deleted: true },
+      select,
+    });
+  } catch (e) {
+    console.error(e);
+    if (e instanceof PrismaClientKnownRequestError) {
+      if (e.code === "P2025") {
+        throw new GraphQLError("User not found");
+      }
+    }
+    throw new GraphQLError(`Something went wrong`);
+  }
 };

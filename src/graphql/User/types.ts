@@ -11,10 +11,12 @@ export type UserResolvers = {
     createUser: ShieldedResolver<null, CreateUserArgs, User>;
     updateUser: ShieldedResolver<null, UpdateUserArgs, User>;
     loginUser: Resolver<null, LoginUserArgs, LoginUserResult>;
-    refreshToken: ShieldedResolver<null, RefreshTokenArgs, LoginUserResult>;
+    refreshToken: Resolver<null, RefreshTokenArgs, LoginUserResult>;
     deleteUser: ShieldedResolver<null, DeleteUserArgs, User>;
+    restoreUser: ShieldedResolver<null, RestoreUserArgs, User>;
   };
 };
+type RestoreUserArgs = DeleteUserArgs;
 type FindMeArgs = {
   select?: Prisma.UserSelect;
 };
@@ -44,6 +46,10 @@ type LoginUserResult = {
 type FindUsersArgs = {
   skip?: number;
   take?: number;
+  filters?: {
+    search?: string;
+    deleted?: boolean;
+  };
   select?: {
     usersCount?: boolean;
     user?: {
