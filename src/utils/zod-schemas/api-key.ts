@@ -20,3 +20,9 @@ export const updateApiKeySchema = z.object(
   },
   "Body is required",
 );
+export const apiKeyFiltersSchama = z.object({
+  search: z.string("search should be string").optional(),
+  expired: z
+    .enum(["true", "false"], "expired should be true or false")
+    .optional(),
+});

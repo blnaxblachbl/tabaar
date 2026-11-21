@@ -6,6 +6,7 @@ import { updateUser } from "./mutations/updateUser";
 import { refreshToken } from "./mutations/refreshToken";
 import { deleteUser } from "./mutations/deleteUser";
 import { findMe } from "./queries/findMe";
+import { restoreUser } from "./mutations/restoreUser";
 
 import { UserResolvers } from "../types";
 
@@ -21,5 +22,6 @@ export default {
     updateUser,
     refreshToken,
     deleteUser,
+    restoreUser,
   },
 } as UserResolvers;

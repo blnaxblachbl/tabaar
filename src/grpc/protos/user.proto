@@ -44,6 +44,8 @@ message GetOneUserRequest {
 message GetUsersRequest {
   optional int32 skip = 1;
   optional int32 take = 2;
+  optional string search = 3;
+  optional bool deleted = 4;
 }
 
 message GetUsersResponse {
@@ -57,4 +59,5 @@ message User {
   string updated_at = 3;
   string name = 4;
   string email = 5;
+  bool deleted = 6;
 }

@@ -40,6 +40,8 @@ message GetOneApiKeyRequest {
 message GetApiKeysRequest {
   optional int32 skip = 1;
   optional int32 take = 2;
+  optional string search = 3;
+  optional bool expired = 4;
 }
 message GetApiKeysResponse {
   repeated ApiKey api_keys = 1;

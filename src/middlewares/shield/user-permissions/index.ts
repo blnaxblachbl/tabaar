@@ -13,7 +13,8 @@ export const userPermissions: UserPermissions = {
     createUser: rules.isAuthorized,
     updateUser: rules.isAuthorized,
     deleteUser: rules.isAuthorized,
-    refreshToken: rules.isAuthorized,
+    refreshToken: allow,
+    restoreUser: rules.isAuthorized,
     loginUser: allow,
   },
 };

@@ -16,4 +16,8 @@ export default gql`
   input RefreshTokenInput {
     refreshToken: String!
   }
+  input FindUsersFilters {
+    search: String
+    deleted: Boolean
+  }
 `;

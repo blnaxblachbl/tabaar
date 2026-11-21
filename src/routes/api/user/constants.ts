@@ -6,4 +6,5 @@ export const USER_FIELDS: Prisma.UserSelect = {
   updatedAt: true,
   name: true,
   email: true,
+  deleted: true,
 };

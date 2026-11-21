@@ -21,6 +21,9 @@ export const updateUser: UserResolvers["Mutation"]["updateUser"] = async (
       if (e.code === "P2002") {
         throw new GraphQLError("Email already in use");
       }
+      if (e.code === "P2025") {
+        throw new GraphQLError("User not found");
+      }
     }
     throw new GraphQLError(`Something went wrong`);
   }

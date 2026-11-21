@@ -10,9 +10,12 @@ export const refreshToken: UserResolvers["Mutation"]["refreshToken"] = async (
   { data, select },
   { prisma, verify },
 ) => {
+  if (!verify) {
+    throw new GraphQLError("Invalid access token");
+  }
   const tokenData = verifyRefreshToken(data.refreshToken);
   if (!tokenData || verify.id !== tokenData.id) {
-    throw new Error("Invalid refresh token");
+    throw new GraphQLError("Invalid refresh token");
   }
   const user = await prisma.user.findUnique({
     where: { id: tokenData.id },

@@ -1,4 +1,5 @@
 import { handleUnaryCall, status } from "@grpc/grpc-js";
+import z from "zod";
 
 import { GetApiKeysRequest } from "#grpc/generated/GetApiKeysRequest";
 import { GetApiKeysResponse } from "#grpc/generated/GetApiKeysResponse";
@@ -7,6 +8,13 @@ import { Prisma } from "#utils/prisma/generated";
 import { skipTakeSchema } from "#utils/zod-schemas/skip-take";
 import { getApiKeyFromGrpc } from "#utils/grpc/getApiKey";
 import { API_KEY_FIELDS } from "./constants";
+import { apiKeyFiltersSchama } from "#utils/zod-schemas/api-key";
+
+const requestSchema = z.object({
+  ...skipTakeSchema.shape,
+  ...apiKeyFiltersSchama.shape,
+  expired: z.boolean("deleted should be boolean").optional(),
+});
 
 export const getApiKeys: handleUnaryCall<
   GetApiKeysRequest,
@@ -26,7 +34,7 @@ export const getApiKeys: handleUnaryCall<
     return;
   }
 
-  const { success, data, error } = skipTakeSchema.safeParse(call.request);
+  const { success, data, error } = requestSchema.safeParse(call.request);
 
   if (!success) {
     callback({
@@ -39,6 +47,17 @@ export const getApiKeys: handleUnaryCall<
   const where: Prisma.ApiKeyWhereInput = {
     deleted: { equals: false },
   };
+
+  if (data?.expired) {
+    where.expiredAt = {
+      lt: new Date(),
+    };
+  }
+  if (data?.search) {
+    where.name = {
+      search: data.search.trim().replace(/\s+/, " | "),
+    };
+  }
   const [apiKeys, apiKeysCount] = await Promise.all([
     prisma.apiKey
       .findMany({

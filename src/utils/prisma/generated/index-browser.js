@@ -150,6 +150,17 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
+exports.Prisma.UserOrderByRelevanceFieldEnum = {
+  email: 'email',
+  name: 'name',
+  password: 'password'
+};
+
+exports.Prisma.ApiKeyOrderByRelevanceFieldEnum = {
+  key: 'key',
+  name: 'name'
+};
+
 
 exports.Prisma.ModelName = {
   User: 'User',

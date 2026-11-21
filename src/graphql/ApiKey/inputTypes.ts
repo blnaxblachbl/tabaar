@@ -9,4 +9,8 @@ export default gql`
     name: String
     expiredAt: DateTime
   }
+  input FindApiKeysFilters {
+    search: String
+    expired: Boolean
+  }
 `;

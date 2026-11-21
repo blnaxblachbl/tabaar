@@ -7,6 +7,7 @@ export default gql`
     updatedAt: DateTime!
     name: String!
     email: String!
+    deleted: Boolean!
   }
   type FindUsersResult {
     users: [User!]!
@@ -18,7 +19,7 @@ export default gql`
     refreshToken: String!
   }
   type Query {
-    findUsers(skip: Int, take: Int): FindUsersResult!
+    findUsers(skip: Int, take: Int, filters: FindUsersFilters): FindUsersResult!
     findOneUser(id: Int!): User!
     findMe: User
   }
@@ -28,5 +29,6 @@ export default gql`
     loginUser(data: LoginUserInput!): LoginUserResult!
     refreshToken(data: RefreshTokenInput!): LoginUserResult!
     deleteUser(id: Int!): User!
+    restoreUser(id: Int!): User!
   }
 `;
