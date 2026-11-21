@@ -20,6 +20,10 @@ type FindApiKeysResult = {
 type FindApiKeysArgs = {
   skip?: number;
   take?: number;
+  filters?: {
+    expired?: boolean;
+    search?: string;
+  };
   select?: {
     apiKeys?: {
       select?: Prisma.ApiKeySelect;

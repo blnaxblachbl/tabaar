@@ -14,7 +14,7 @@ export default gql`
     apiKeysCount: Int!
   }
   type Query {
-    findApiKeys(skip: Int, take: Int): ApiKeysResult!
+    findApiKeys(skip: Int, take: Int, filters: FindApiKeysFilters): ApiKeysResult!
     findOneApiKey(id: Int!): ApiKey!
   }
   type Mutation {
