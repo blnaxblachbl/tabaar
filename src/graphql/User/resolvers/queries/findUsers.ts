@@ -11,15 +11,14 @@ export const findUsers: UserResolvers["Query"]["findUsers"] = async (
     deleted: { equals: !!filters?.deleted },
   };
   if (filters?.search) {
+    const search = filters.search.trim().replace(/\s+/, " | ");
     where.OR = [
       {
         name: {
-          contains: filters.search,
-          mode: "insensitive",
+          search,
         },
         email: {
-          contains: filters.search,
-          mode: "insensitive",
+          search,
         },
       },
     ];

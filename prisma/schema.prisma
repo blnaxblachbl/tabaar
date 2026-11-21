@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["typedSql"]
+  previewFeatures = ["typedSql", "fullTextSearchPostgres"]
   output          = "../src/utils/prisma/generated"
 }
 
