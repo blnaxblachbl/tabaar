@@ -1,4 +1,5 @@
 import { handleUnaryCall, status } from "@grpc/grpc-js";
+import z from "zod";
 
 import { GetUsersRequest } from "#grpc/generated/GetUsersRequest";
 import { GetUsersResponse } from "#grpc/generated/GetUsersResponse";
@@ -7,6 +8,13 @@ import { Prisma } from "#utils/prisma/generated";
 import { skipTakeSchema } from "#utils/zod-schemas/skip-take";
 import { getApiKeyFromGrpc } from "#utils/grpc/getApiKey";
 import { USER_FIELDS } from "./constants";
+import { userFiltersSchama } from "#utils/zod-schemas/user";
+
+const requestSchema = z.object({
+  ...skipTakeSchema.shape,
+  ...userFiltersSchama.shape,
+  deleted: z.boolean("deleted should be boolean").optional(),
+});
 
 export const getUsers: handleUnaryCall<
   GetUsersRequest,
@@ -26,7 +34,7 @@ export const getUsers: handleUnaryCall<
     return;
   }
 
-  const { success, data, error } = skipTakeSchema.safeParse(call.request);
+  const { success, data, error } = requestSchema.safeParse(call.request);
 
   if (!success) {
     callback({
@@ -37,8 +45,22 @@ export const getUsers: handleUnaryCall<
   }
 
   const where: Prisma.UserWhereInput = {
-    deleted: { equals: false },
+    deleted: { equals: !!data.deleted },
   };
+
+  if (data.search) {
+    const search = data.search.trim().replace(/\s+/, " | ");
+    where.OR = [
+      {
+        name: {
+          search,
+        },
+        email: {
+          search,
+        },
+      },
+    ];
+  }
   const [users, usersCount] = await Promise.all([
     prisma.user
       .findMany({

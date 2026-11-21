@@ -4,12 +4,12 @@ import z from "zod";
 import { createContext } from "#utils/context";
 import { Prisma } from "#utils/prisma/generated/client";
 import { skipTakeSchema } from "#utils/zod-schemas/skip-take";
-import { userFilters } from "#utils/zod-schemas/user";
+import { userFiltersSchama } from "#utils/zod-schemas/user";
 import { USER_FIELDS } from "./constants";
 
 const searchParamsSechema = z.object({
   ...skipTakeSchema.shape,
-  ...userFilters.shape,
+  ...userFiltersSchama.shape,
 });
 
 export async function getUsers(req: Request, res: Response) {

@@ -7,6 +7,7 @@ export interface User {
   'updatedAt'?: (string);
   'name'?: (string);
   'email'?: (string);
+  'deleted'?: (boolean);
 }
 
 export interface User__Output {
@@ -15,4 +16,5 @@ export interface User__Output {
   'updatedAt'?: (string);
   'name'?: (string);
   'email'?: (string);
+  'deleted'?: (boolean);
 }
